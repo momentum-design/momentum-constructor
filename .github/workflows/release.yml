@@ -1,0 +1,31 @@
+on:
+  push:
+    branches:    
+      - main
+      - test
+    paths:
+      - 'src/**'
+      - 'raw/2022/**'
+      - '.github/workflows/**'
+      - '!packages/**'
+name: Update packages for release and send PR
+jobs:
+  jobAutomation:
+    name: Automation Deploy Tokens
+    runs-on: ubuntu-latest
+    if: ${{ github.repository_owner == 'momentum-design' }}
+    steps:
+    - name: Check out
+      uses: actions/checkout@master
+      with:
+          fetch-depth: 2
+    - name: Install Package and Build
+      run: npm run init-build
+    - name: check momentum-abstract version
+      run: npm run update-version
+    - name: config 
+      run: |
+        git config --global user.email "automation@cisco.com"
+        git config --global user.name "Automation"
+    - name: commit new release
+      run: git add -A && git commit -m "[skip ci]Automation(release):From ${{ github.actor }}" && git push https://${{ secrets.ACTION_TOKEN }}@github.com/${{ github.repository }}.git -f
