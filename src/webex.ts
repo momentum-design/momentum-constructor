@@ -39,7 +39,7 @@ export class Webex {
                 'Content-Length': _data.length
             }
         }, res => {
-            console.log(`state code: ${res.statusCode}`);
+            //console.log(`state code: ${res.statusCode}`);
         })
 
         _request.on('error', error => {
