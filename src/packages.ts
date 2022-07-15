@@ -18,7 +18,7 @@ class PackagesFactory {
         this.packageItems=[];
         const list =fs.readdirSync(path_packages);
         list.forEach((folder)=>{
-            const packagePath = path.join(folder, 'package.json');
+            const packagePath = path.join(path_packages, folder, 'package.json');
             if(fs.existsSync(packagePath)) {
                 const _package = require(packagePath);
                 this.packageItems.push({
