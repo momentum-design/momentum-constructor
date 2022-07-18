@@ -2,7 +2,7 @@
 	"name": "@momentum-constructor/naming",
 	"version": "1.0.0",
 	"description": "tools for format momentum-abstract data name",
-	"main": "src/index.js",
+	"main": "dist/index.js",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "rm -rf ./dist/ && tsc",
@@ -26,6 +26,9 @@
 	"dependencies": {
 		"write": "^2.0.0",
 		"mkdirp": "^1.0.4"
-	}
+	},
+  "publishConfig": {
+    "access": "public"
+  }
 }
 

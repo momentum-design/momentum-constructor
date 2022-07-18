@@ -6,6 +6,7 @@ export class Color extends Convertor{
 
     constructor (options:IOptions) {
         super(options);
+        this.fileFilter =  /.(json)$/i;
     }
 
     isEndNode(item):boolean {
@@ -13,14 +14,11 @@ export class Color extends Convertor{
         || (item.colors !==undefined && item.type!==undefined);
     }
 
-    convert() {
-        this.list().filter((fileName)=>{
-            return /.json$/i.test(fileName);
-        }).forEach((fileName)=>{
-            const json = this.readJson(path.join(this.options.input, fileName));
-            let newJson = this.options.flat ?  this.flat(json, this.isEndNode): json;
-            this.loopName(newJson, this.isEndNode);
-            this.save(path.join(this.options.output, fileName), JSON.stringify(newJson,null,'\t'));
+    flat(json:any) {
+        Object.keys(json).forEach((key)=>{
+            json[key] = super.flat(json);
         });
+        return json;
     }
+    
 }

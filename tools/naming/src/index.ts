@@ -15,11 +15,11 @@ import { IOptions } from './types';
 class Name {
 
     icon(options:IOptions) {
-        new Icon(options).convert();
+        return new Icon(options);
     }
 
     color(options:IOptions) {
-        new Color(options).convert();
+        return new Color(options);
     }
 
 };
