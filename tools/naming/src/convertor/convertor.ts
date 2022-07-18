@@ -1,83 +1,113 @@
-import { IOptions } from '../types';
-import { styles } from '../styles';
+import { IFile, IOptions, IReplacementItem } from '../types';
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 const path = require('path');
 const write = require('write');
 
 export class Convertor {
 
     options:IOptions;
+    files: Record<string, IFile>;
+    fileFilter:RegExp;
 
     constructor (options:IOptions) {
         this.options = options;
+        this.fileFilter =  /.(svg|json|js)$/i; // default
+        this.files = {};
     }
 
-    protected list():any[] {
-        if(fs.existsSync(this.options.input)) {
-            return fs.readdirSync(this.options.input);
+    //need override
+    isEndNode(item):boolean {
+        return !Array.isArray(item) && !this.isOjbect(item);
+    }
+
+    flat(json:any):Record<string,any> {
+        const ret = {};
+        this._flat(ret, json);
+        return  ret;
+    }
+
+    convert() {
+        this.getFileList().forEach((fileName)=>{
+            const json = JSON.parse(fs.readFileSync(path.join(this.options.input, fileName)));
+            let newJson = this.options.flat ?  this.flat(json): json;
+            this.renameTokenKeys(newJson);
+            const newName = this.replace(fileName, this.options.replacement?.fileName);
+            this.files[newName] = {
+                path: path.join(this.options.output, newName),
+                content: newJson
+            };
+        });
+        return this.files;
+    }
+
+    rename() {
+        if(this.options.output) {
+            mkdirp.sync(this.options.output);
+            this.getFileList().forEach((fileName)=>{
+                fs.copyFileSync(
+                    path.join(this.options.input, fileName),
+                    path.join(this.options.output, fileName)
+                );
+                fs.renameSync(
+                    path.join(this.options.output, fileName),
+                    path.join(this.options.output, this.replace(fileName, this.options.replacement?.fileName))
+                );
+            });
         }
-        return [];
     }
 
-    protected makeDir(p:string) {
-        const _s = path.sep || '/';
-        const arr = p.split(_s);
-        //let _path = arr[]
-
+    save() {
+        this.convert();
+        Object.values(this.files).forEach((file)=>{
+            write.sync(file.path, JSON.stringify(file.content,null,'\t'), { overwrite: true });
+        });
     }
 
-    protected rename(oldPath, newPath) {
-        fs.renameSync(oldPath, newPath);
+    protected getFileList():string[] {
+        let fileNameList = [];
+        if(fs.existsSync(this.options.input)) {
+            fileNameList = fs.readdirSync(this.options.input);
+            console.log(this.options.input);
+        }
+        return fileNameList.filter((name)=>{
+            return this.fileFilter.test(name);
+        });
     }
 
-    protected save(path:string, content:string) {
-        write.sync(path, content, { overwrite: true });
-    }
 
-    protected loopName(json:any,eot:(item:any)=>boolean) {
+    protected renameTokenKeys(json:any) {
         Object.keys(json).forEach((key)=>{
-            const newKey = this.replace(key);
+            const newKey = this.replace(key, this.options.replacement?.token);
             if(newKey!==key) {
                 json[newKey] = JSON.parse(JSON.stringify(json[key]));
                 delete json[key];
             }
-            if(!eot(json[newKey]) && json[newKey]) {
-                this.loopName(json[newKey], eot);
+            if(!this.isEndNode(json[newKey]) && json[newKey]) {
+                this.renameTokenKeys(json[newKey]);
             }
         });
     }
 
-    private _flat(ret:Record<string,any>, json:any,eot:(item:any)=>boolean) {
+    protected _flat(ret:Record<string,any>, json:any) {
         Object.keys(json).forEach((key)=>{
-            if(eot(json[key])) {
+            if(this.isEndNode(json[key])) {
                 ret[key] = json[key];
             } else if(json[key]){
-                this._flat(ret, json[key], eot);
+                this._flat(ret, json[key]);
             }
         });
     }
 
-    protected flat(json:any, eot:(item:any)=>boolean):Record<string,any> {
-        const ret = {};
-        this._flat(ret, json, eot);
-        return  ret;
-    }
-
-    protected replace(name:string):string {
-        if(this.options.replacement) {
-            return name.replace(this.options.replacement.pattern, this.options.replacement.words);
-        }
-        const _styleName = this.options.style;
-        if(_styleName && styles[_styleName]) {
-            return name.replace(styles[_styleName].pattern, styles[_styleName].words);
+    protected replace(name:string, replacement: IReplacementItem):string {
+        if(replacement) {
+            return name.replace(replacement.pattern, replacement.words);
         }
         return name;
     }
 
-    protected readJson(path:string):any {
-        return JSON.parse(fs.readFileSync(path));
+    private isOjbect(obj:any) {
+        return Object. prototype. toString. call(obj) === '[Object Object]';
     }
-
-    convert() {}
 
 }
