@@ -16,7 +16,7 @@ export class Color extends Convertor{
 
     flat(json:any) {
         Object.keys(json).forEach((key)=>{
-            json[key] = super.flat(json);
+            json[key] = super.flat(json[key]);
         });
         return json;
     }
