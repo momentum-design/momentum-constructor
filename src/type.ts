@@ -12,6 +12,7 @@ export type IActionProcessArgs = {
     tokenNpm?:string;
     actor?: string;
     diffOnly?:boolean;
+    repository?:string;
 }
 
 export type IProcessArgs = IActionProcessArgs | Record<string, string>;
