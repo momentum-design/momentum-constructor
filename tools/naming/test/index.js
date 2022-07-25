@@ -1,6 +1,6 @@
 const path = require('path');
 const { naming } = require('../dist/index');
-let packagePath = require.resolve('@momentum-ui/abstract');
+let packagePath = require.resolve('momentum-abstract');
 
 const a = naming.color({
     input: path.resolve(packagePath, '../color'),

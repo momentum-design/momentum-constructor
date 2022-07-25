@@ -28,4 +28,4 @@ jobs:
         git config --global user.email "automation@cisco.com"
         git config --global user.name "Automation"
     - name: commit new release
-      run: git add -A && git commit -m "[skip ci]Automation(release):From ${{ github.actor }}" && git push https://${{ secrets.ACTION_TOKEN }}@github.com/${{ github.repository }}.git -f
+      run: npm run commit actor=${{ github.actor }} token=${{ secrets.MOMENTUM_TOKEN }} repository=${{github.repository}}
