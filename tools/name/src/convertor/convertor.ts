@@ -3,6 +3,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 const write = require('write');
+const { exec } = require('child_process');
 
 export class Convertor {
 
@@ -14,6 +15,19 @@ export class Convertor {
         this.options = options;
         this.fileFilter =  /.(svg|json|js)$/i; // default
         this.files = {};
+    }
+
+    async clean() {
+        await this.cleanOutput();
+    }
+
+    // just for test
+    cleanOutput(): Promise<any> {
+        return new Promise((resolve, reject)=>{
+            exec(`rm -rf ${ path.dirname(this.options.output) }`, (err, stdout, stderr) => {
+                resolve(1);
+            });
+        });
     }
 
     //need override
@@ -28,6 +42,7 @@ export class Convertor {
     }
 
     convert() {
+        this.files = {};
         this.getFileList().forEach((fileName)=>{
             const json = JSON.parse(fs.readFileSync(path.join(this.options.input, fileName)));
             let newJson = this.options.flat ?  this.flat(json): json;
@@ -58,7 +73,9 @@ export class Convertor {
     }
 
     save() {
-        this.convert();
+        if(Object.keys(this.files).length===0) {
+            this.convert();
+        }
         Object.values(this.files).forEach((file)=>{
             write.sync(file.path, JSON.stringify(file.content,null,'\t'), { overwrite: true });
         });
@@ -68,7 +85,6 @@ export class Convertor {
         let fileNameList = [];
         if(fs.existsSync(this.options.input)) {
             fileNameList = fs.readdirSync(this.options.input);
-            console.log(this.options.input);
         }
         return fileNameList.filter((name)=>{
             return this.fileFilter.test(name);

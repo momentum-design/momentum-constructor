@@ -1,8 +1,5 @@
 on:
-  push:
-    branches:    
-      - main
-      - test
+  pull_request:
     paths:
       - 'src/**'
       - 'raw/2022/**'
@@ -21,13 +18,5 @@ jobs:
           fetch-depth: 2
     - name: Install Package and Build
       run: npm run init-build
-    - name: check momentum-abstract version
-      run: npm run update-version
     - name: Test release data
-      run: npm run test
-    - name: config 
-      run: |
-        git config --global user.email "automation@cisco.com"
-        git config --global user.name "Automation"
-    - name: commit new release
-      run: npm run commit actor=${{ github.actor }} token=${{ secrets.MOMENTUM_TOKEN }} repository=${{github.repository}}
+      run: npm run test]
