@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const path_packages = path.resolve(__dirname,'../tools');
 const write = require('write');
+const { exec } = require('child_process');
 
 class PackagesFactory {
 
@@ -28,6 +29,32 @@ class PackagesFactory {
                     fileContent: _package
                 });
             }
+        });
+    }
+
+    async build() {
+        await this.buildPackage();
+    }
+
+    private buildPackage(): Promise<any> {
+        return new Promise((resolve, reject)=>{
+            let todo = this.packageItems.length;
+            const _callback = ()=>{
+                todo--;
+                if(todo<=0) {
+                    resolve(1);
+                }
+            };
+            this.packageItems.forEach((_package)=>{
+                console.log(`building ${ _package.name}`);
+                if(_package.fileContent.scripts && _package.fileContent.scripts.build) {
+                    exec(`cd ${ path.relative(process.cwd(), path.dirname(_package.filePath)) } && npm run build`, (err, stdout, stderr) => {
+                        _callback();
+                    });
+                } else {
+                    _callback();
+                }
+            });
         });
     }
 
