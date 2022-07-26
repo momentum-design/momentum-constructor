@@ -4,7 +4,7 @@ constructor tools for momentum-abstract
 # Icon
 
 ```
-const naming = require('momentum-contructor-naming');
+const naming = require('momentum-constructor-name');
 const path = require('path');
 let packagePath = require.resolve('momentum-abstract');
 naming.icon({
@@ -24,7 +24,7 @@ naming.icon({
 ### Export files
 
 ```
-const naming = require('momentum-contructor-naming');
+const naming = require('momentum-constructor-name');
 const path = require('path');
 let packagePath = require.resolve('momentum-abstract');
 naming.color({
@@ -47,7 +47,7 @@ naming.color({
 ### Get Json
 
 ```
-const naming = require('momentum-contructor-naming');
+const naming = require('momentum-constructor-name');
 const path = require('path');
 let packagePath = require.resolve('momentum-abstract');
 let files = naming.color({
