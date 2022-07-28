@@ -1,9 +1,9 @@
 import { IFile, IOptions, IReplacementItem } from '../types';
 const fs = require('fs');
-const mkdirp = require('mkdirp');
 const path = require('path');
 const write = require('write');
-const { exec } = require('child_process');
+
+const regIsFoldPath = new RegExp(path.sep + '$');
 
 export class Convertor {
 
@@ -13,20 +13,24 @@ export class Convertor {
 
     constructor (options:IOptions) {
         this.options = options;
+        this.fixPath();
         this.fileFilter =  /.(svg|json|js)$/i; // default
         this.files = {};
     }
 
-    async clean() {
-        await this.cleanOutput();
+    fixPath() {
+        if(!regIsFoldPath.test(this.options.input)) {
+            this.options.input+=path.sep;
+        }
+        if(!regIsFoldPath.test(this.options.output)) {
+            this.options.output+=path.sep;
+        }
     }
 
-    // just for test
-    cleanOutput(): Promise<any> {
-        return new Promise((resolve, reject)=>{
-            exec(`rm -rf ${ path.dirname(this.options.output) }`, (err, stdout, stderr) => {
-                resolve(1);
-            });
+    clean() {
+        fs.mkdirSync(this.options.output, {
+            recursive: true,
+            force: true
         });
     }
 
@@ -58,7 +62,9 @@ export class Convertor {
 
     rename() {
         if(this.options.output) {
-            mkdirp.sync(this.options.output);
+            if(!fs.existsSync(this.options.output)) {
+                this.clean();
+            }
             this.getFileList().forEach((fileName)=>{
                 fs.copyFileSync(
                     path.join(this.options.input, fileName),
