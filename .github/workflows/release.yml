@@ -5,9 +5,8 @@ on:
     paths:
       - 'src/**'
       - 'tools/**'
-      - 'raw/2022/**'
       - '.github/workflows/**'
-      - '!packages/**'
+      - '!dist/**'
 name: Update packages for release and send PR
 jobs:
   jobAutomation:
