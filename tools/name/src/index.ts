@@ -1,7 +1,7 @@
 import { Icon, Color } from './convertor';
 import { IOptions } from './types';
 
-class Name {
+class Convertors {
 
     icon(options:IOptions) {
         return new Icon(options);
@@ -11,5 +11,9 @@ class Name {
         return new Color(options);
     }
 
+    illustration(options:IOptions) {
+        return new Icon(options);
+    }
+
 };
-export const naming = new Name();
+export const convertors = new Convertors();

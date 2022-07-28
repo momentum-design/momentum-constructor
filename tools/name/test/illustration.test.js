@@ -4,14 +4,14 @@ const { convertors } = require('../dist/index');
 let packagePath = require.resolve('momentum-abstract');
 
 let myConvertor;
-let outputPath = path.resolve(__dirname,'./output/icon');
+let outputPath = path.resolve(__dirname,'./output/illustration');
 let newIcons = [];
 
-describe("Test Icon",()=>{
+describe("Test illustration",()=>{
 
     beforeAll(() => {
-        myConvertor = convertors.icon({
-            input: path.resolve(packagePath, '../icon'),
+        myConvertor = convertors.illustration({
+            input: path.resolve(packagePath, '../illustration'),
             output: outputPath,
             replacement: {
                 fileName: {
@@ -25,11 +25,11 @@ describe("Test Icon",()=>{
         newIcons = fs.readdirSync(outputPath);
     });
 
-    test('Icon: Test convert', () => {
+    test('Icon: illustration convert', () => {
         expect(Object.keys(newIcons).length).toBeGreaterThan(0);
     });
 
-    test('Icon: has replace file name', () => {
+    test('Icon: illustration replace file name', () => {
         let hasNoConvert = newIcons.some((fileName)=>{
             return /\-/.test(fileName);
         });
