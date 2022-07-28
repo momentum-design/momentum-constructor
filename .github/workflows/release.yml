@@ -7,7 +7,7 @@ on:
       - 'tools/**'
       - '.github/workflows/**'
       - '!dist/**'
-name: Update packages for release and send PR
+name: Update Verison and Test
 jobs:
   jobAutomation:
     name: Automation Deploy Tokens
