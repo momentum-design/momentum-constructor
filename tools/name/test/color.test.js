@@ -1,16 +1,16 @@
 const path = require('path');
 const fs = require('fs');
-const { naming } = require('../dist/index');
+const { convertors } = require('../dist/index');
 let packagePath = require.resolve('momentum-abstract');
 
-let convertor;
+let myConvertor;
 let outputPath = path.resolve(__dirname,'./output/color');
 let newIcons = [];
 
 describe("Test Color",()=>{
 
     beforeAll(() => {
-        convertor = naming.color({
+        myConvertor = convertors.color({
             input: path.resolve(packagePath, '../color'),
             output: outputPath,
             replacement: {
@@ -25,14 +25,14 @@ describe("Test Color",()=>{
             },
             flat: true
         });
-        convertor.clean();
-        convertor.convert();
-        convertor.save();
+        myConvertor.clean();
+        myConvertor.convert();
+        myConvertor.save();
         newIcons = fs.readdirSync(outputPath);
     });
 
     test('Color: Test convert', () => {
-        expect(Object.keys(convertor.files).length).toBeGreaterThan(0);
+        expect(Object.keys(myConvertor.files).length).toBeGreaterThan(0);
     });
 
     test('Color: has replace file name', () => {
@@ -43,4 +43,3 @@ describe("Test Color",()=>{
     });
 
 });
-
