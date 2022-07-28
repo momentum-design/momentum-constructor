@@ -8,7 +8,6 @@ export interface IReplacementItem {
     words: string | any;
 };
 
-
 export interface IOptions {
     input: string;
     output:string;
