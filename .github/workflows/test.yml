@@ -5,7 +5,7 @@ on:
       - 'raw/2022/**'
       - '.github/workflows/**'
       - '!packages/**'
-name: Update packages for release and send PR
+name: Test
 jobs:
   jobAutomation:
     name: Automation Deploy Tokens
