@@ -1,7 +1,5 @@
 on:
   push:
-    branches:    
-      - main
     paths:
       - 'src/**'
       - 'tools/**'
@@ -9,7 +7,7 @@ on:
       - '!dist/**'
 name: Release
 jobs:
-  jobAutomation:
+  jobRelease:
     name: Automation Deploy Tokens
     runs-on: ubuntu-latest
     if: ${{ github.repository_owner == 'momentum-design' }}
