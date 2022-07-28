@@ -2,7 +2,6 @@ import { IFile, IOptions, IReplacementItem } from '../types';
 const fs = require('fs');
 const path = require('path');
 const write = require('write');
-
 const regIsFoldPath = new RegExp(path.sep + '$');
 
 export class Convertor {

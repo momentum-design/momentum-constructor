@@ -7,7 +7,7 @@
 		"test": "jest",
 		"build": "npm run build:self && node dist/build",
 		"build:self": "rm -rf ./dist/ && tsc",
-		"init-build": "npm run install && npm run build",
+		"init-build": "npm install && npm run build",
 		"update-version": "node dist/version",
 		"publish": "node dist/publish",
 		"commit": "node dist/commit"

@@ -2,9 +2,9 @@ on:
   push:
     branches:    
       - main
-      - test
     paths:
       - 'src/**'
+      - 'tools/**'
       - 'raw/2022/**'
       - '.github/workflows/**'
       - '!packages/**'
