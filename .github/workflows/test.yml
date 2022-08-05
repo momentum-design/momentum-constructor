@@ -2,9 +2,8 @@ on:
   pull_request:
     paths:
       - 'src/**'
-      - 'raw/2022/**'
+      - 'tools/**'
       - '.github/workflows/**'
-      - '!packages/**'
 name: Test
 jobs:
   jobAutomation:
