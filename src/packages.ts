@@ -1,9 +1,11 @@
+import { threadId } from 'worker_threads';
 import { IPackageItem } from './type';
 
+const PACKAGE_FOLDER = 'tools'
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
-const path_packages = path.resolve(__dirname,'../tools');
+const path_packages = path.resolve(__dirname,`../${PACKAGE_FOLDER}`);
 const write = require('write');
 const { exec } = require('child_process');
 
@@ -24,6 +26,7 @@ class PackagesFactory {
                 const _package = require(packagePath);
                 this.packageItems.push({
                     name: _package.name,
+                    folder: path.join(PACKAGE_FOLDER, folder,'/'),
                     localVersion:_package.version,
                     filePath: packagePath,
                     fileContent: _package
@@ -34,6 +37,24 @@ class PackagesFactory {
 
     async build() {
         await this.buildPackage();
+    }
+
+    private getDiffList(): Promise<any> {
+        return new Promise((resolve, reject)=>{
+            exec('git diff --name-only HEAD~ HEAD', (err, stdout, stderr) => {
+                let files = stdout ? stdout.split('\n'): null;
+                if(files && files.length>0) {
+                    files.forEach((file)=>{
+                        this.packageItems.forEach((pkg)=>{
+                            if(file.indexOf(pkg.folder)!==-1) {
+                                pkg.hasDiff = true;
+                            }
+                        });
+                    });
+                }
+                resolve(1);
+            });
+        });
     }
 
     private buildPackage(): Promise<any> {
@@ -71,21 +92,28 @@ class PackagesFactory {
                     resolve(1);
                 }
             };
-            this.packageItems.forEach((_package)=>{
-                this.getOnlineVersion(_package.name)
-                .then((data)=>{
-                    const online = JSON.parse(data); 
-                    if(online && online.latest) {
-                        _package.onlineVersion = online.latest;
-                        const nextOnlineVersion =  this.nextVersion(_package.onlineVersion);
-                        if(this.ifUpdateLocalVersion(_package.onlineVersion, nextOnlineVersion)) {
-                            _package.localVersion =  _package.fileContent.version = nextOnlineVersion;
-                            write.sync(_package.filePath, JSON.stringify(_package.fileContent, null, '\t'), { overwrite: true });
-                        }   
+            this.getDiffList().then(()=>{
+                this.packageItems.forEach((_package)=>{
+                    if(_package.hasDiff) {
+                        console.log(`check ${_package.name} verison...`);
+                        this.getOnlineVersion(_package.name)
+                        .then((data)=>{
+                            const online = JSON.parse(data); 
+                            if(online && online.latest) {
+                                _package.onlineVersion = online.latest;
+                                const nextOnlineVersion =  this.nextVersion(_package.onlineVersion);
+                                if(this.ifUpdateLocalVersion(_package.onlineVersion, nextOnlineVersion)) {
+                                    _package.localVersion =  _package.fileContent.version = nextOnlineVersion;
+                                    write.sync(_package.filePath, JSON.stringify(_package.fileContent, null, '\t'), { overwrite: true });
+                                }   
+                            }
+                        })
+                        .finally(()=>{
+                            _callback();
+                        });
+                    } else {
+                        _callback();
                     }
-                })
-                .finally(()=>{
-                    _callback();
                 });
             });
         });
