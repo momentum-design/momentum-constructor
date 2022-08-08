@@ -10,7 +10,8 @@
 		"init-build": "npm install && npm run build",
 		"update-version": "node dist/version",
 		"publish": "node dist/publish",
-		"commit": "node dist/commit"
+		"commit": "node dist/commit",
+		"momentum-constructor-svgsymbol:build": "node ./tools/svgsymbol/build.js"
 	},
 	"repository": {
 		"type": "git",
