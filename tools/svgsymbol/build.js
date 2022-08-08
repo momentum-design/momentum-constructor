@@ -10,19 +10,20 @@ let fs = require("fs"),
     path = require("path"),
     cheerio = require("cheerio"),
     beautify = require("xml-beautifier"),
-    baseUrl = process.cwd().replace(/\/code\/web.*/, "/code/web/"),
-    packagePath = require.resolve("momentum-abstract"),
+    baseUrl = __dirname,
     conf = {
-        svgSource: path.resolve(packagePath, "../icon"),
-        targetSvgFile: path.resolve(baseUrl, "tools/symbolBuilder/icons.svg"),
-        targetJsFile: path.resolve(baseUrl, "tools/symbolBuilder/icons.js"),
-        targetIndexFile: path.resolve(baseUrl, "tools/symbolBuilder/index.html"),
+        svgSource: path.resolve(baseUrl, "example"),
+        targetFolder: path.resolve(baseUrl, "dist"),
+        targetSvgFile: path.resolve(baseUrl, "dist/icons.svg"),
+        targetJsFile: path.resolve(baseUrl, "dist/icons.js"),
+        targetIndexFile: path.resolve(baseUrl, "dist/index.html"),
         blackListTags: ["symbol", "title", "desc", "use", "script"],
         viewBox: {}
     };
 
 let svgBuilder = {
     initialize: function () {
+        if (!fs.existsSync(conf.targetFolder)) fs.mkdirSync(conf.targetFolder);
         conf.svgFileList = svgBuilder.getSvgfileList(conf.svgSource);
     },
 
