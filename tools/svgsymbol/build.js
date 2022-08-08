@@ -93,7 +93,7 @@ let svgBuilder = {
         indexContent.push('<script src="icons.js"></script>');
         indexContent.push("<script>");
         indexContent.push(
-            'document.body.insertAdjacentHTML("afterBegin", "<div style=\\"height:0;position:absolute;\\">" + window.pbConfig.svgSymbol + \'</div>\');'
+            'document.body.insertAdjacentHTML("afterBegin", "<div style=\\"height:0;position:absolute;\\">" + window.namespace.svgSymbol + \'</div>\');'
         );
         indexContent.push('var cl=["Yellow","GreenYellow","Lime","DarkSlateGray","BlueViolet"];');
         indexContent.push("window.setInterval(function(){cl.push(cl.shift());document.styleSheets[0].cssRules[1].style.fill=cl[0];},15000);");
@@ -104,8 +104,8 @@ let svgBuilder = {
 
     buildJSFile: function (svgContent) {
         return [
-            "window.pbConfig = window.pbConfig || {};",
-            "window.pbConfig.svgSymbol = [",
+            "window.namespace = window.namespace || {};",
+            "window.namespace.svgSymbol = [",
             svgContent
                 .join("\n")
                 .split("\n")
