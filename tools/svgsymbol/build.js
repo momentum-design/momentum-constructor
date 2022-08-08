@@ -10,19 +10,21 @@ let fs = require("fs"),
     path = require("path"),
     cheerio = require("cheerio"),
     beautify = require("xml-beautifier"),
-    baseUrl = process.cwd().replace(/\/code\/web.*/, "/code/web/"),
+    baseUrl = __dirname,
     packagePath = require.resolve("momentum-abstract"),
     conf = {
         svgSource: path.resolve(packagePath, "../icon"),
-        targetSvgFile: path.resolve(baseUrl, "tools/symbolBuilder/icons.svg"),
-        targetJsFile: path.resolve(baseUrl, "tools/symbolBuilder/icons.js"),
-        targetIndexFile: path.resolve(baseUrl, "tools/symbolBuilder/index.html"),
+        targetFolder: path.resolve(baseUrl, "dist"),
+        targetSvgFile: path.resolve(baseUrl, "dist/icons.svg"),
+        targetJsFile: path.resolve(baseUrl, "dist/icons.js"),
+        targetIndexFile: path.resolve(baseUrl, "dist/index.html"),
         blackListTags: ["symbol", "title", "desc", "use", "script"],
         viewBox: {}
     };
 
 let svgBuilder = {
     initialize: function () {
+        if (!fs.existsSync(conf.targetFolder)) fs.mkdirSync(conf.targetFolder);
         conf.svgFileList = svgBuilder.getSvgfileList(conf.svgSource);
     },
 
@@ -92,7 +94,7 @@ let svgBuilder = {
         indexContent.push('<script src="icons.js"></script>');
         indexContent.push("<script>");
         indexContent.push(
-            'document.body.insertAdjacentHTML("afterBegin", "<div style=\\"height:0;position:absolute;\\">" + window.pbConfig.svgSymbol + \'</div>\');'
+            'document.body.insertAdjacentHTML("afterBegin", "<div style=\\"height:0;position:absolute;\\">" + window.namespace.svgSymbol + \'</div>\');'
         );
         indexContent.push('var cl=["Yellow","GreenYellow","Lime","DarkSlateGray","BlueViolet"];');
         indexContent.push("window.setInterval(function(){cl.push(cl.shift());document.styleSheets[0].cssRules[1].style.fill=cl[0];},15000);");
@@ -103,8 +105,8 @@ let svgBuilder = {
 
     buildJSFile: function (svgContent) {
         return [
-            "window.pbConfig = window.pbConfig || {};",
-            "window.pbConfig.svgSymbol = [",
+            "window.namespace = window.namespace || {};",
+            "window.namespace.svgSymbol = [",
             svgContent
                 .join("\n")
                 .split("\n")
