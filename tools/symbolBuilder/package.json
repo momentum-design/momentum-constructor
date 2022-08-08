@@ -1,0 +1,24 @@
+{
+  "name": "momentum-constructor-symbolbuilder",
+  "version": "1.0.0",
+  "description": "index of momentum icons",
+  "main": "build.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tairraos/momentum.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tairraos/momentum/issues"
+  },
+  "homepage": "https://github.com/Tairraos/momentum#readme",
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.12",
+    "momentum-abstract": "^1.0.7",
+    "xml-beautifier": "^0.5.0"
+  }
+}
