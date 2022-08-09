@@ -1,25 +1,25 @@
 {
-    "name": "momentum-constructor-svgsymbol",
-    "version": "1.0.1",
-    "description": "Build to svgsymbol and generate index page of icons.",
-    "main": "build.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
+	"name": "momentum-constructor-svgsymbol",
+	"version": "1.0.1",
+	"description": "Build to svgsymbol and generate index page of icons.",
+	"main": "build.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
 		"build": "node build.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/momentum-design/momentum-constructor.git"
-    },
-    "author": "Tairraos",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/momentum-design/momentum-constructor/issues"
-    },
-    "homepage": "https://github.com/momentum-design/momentum-constructor#readme",
-    "devDependencies": {
-        "momentum-abstract": "^1.0.5",
-        "cheerio": "^1.0.0-rc.12",
-        "xml-beautifier": "^0.5.0"
-    }
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/momentum-design/momentum-constructor.git"
+	},
+	"author": "Tairraos",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/momentum-design/momentum-constructor/issues"
+	},
+	"homepage": "https://github.com/momentum-design/momentum-constructor#readme",
+	"devDependencies": {
+		"momentum-abstract": "^1.0.5",
+		"cheerio": "^1.0.0-rc.12",
+		"xml-beautifier": "^0.5.0"
+	}
 }
