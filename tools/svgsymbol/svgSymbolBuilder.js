@@ -157,6 +157,13 @@ Object.assign(svgSymbolBuilder, {
         ].join("\n");
     },
 
+    saveFile: function (name, content, type) {
+        if (name) {
+            console.log(`Saving ${type} file to ${name}`);
+            fs.writeFileSync(name, content, { encoding: "utf8" });
+        }
+    },
+
     doBuild: function (config) {
         if (!conf.targetFolder || typeof config === "object") {
             svgSymbolBuilder.setup(config);
@@ -164,24 +171,17 @@ Object.assign(svgSymbolBuilder, {
 
         let svgContent = svgSymbolBuilder.buildSymbol();
 
-        if (conf.targetSvgFile) {
-            console.log("Saving builded file to ", conf.targetSvgFile);
-            fs.writeFileSync(conf.targetSvgFile, svgContent.join("\n"), { encoding: "utf8" });
-        }
-        if (conf.targetJsFile) {
-            console.log("Saving JS file to ", conf.targetJsFile);
-            fs.writeFileSync(conf.targetJsFile, svgSymbolBuilder.buildJSFile(svgContent), { encoding: "utf8" });
-        }
-        if (conf.targetIndexFile) {
-            console.log("Saving index file to ", conf.targetIndexFile);
-            fs.writeFileSync(conf.targetIndexFile, svgSymbolBuilder.buildIndexPage().join("\n"), { encoding: "utf8" });
-        }
+        svgSymbolBuilder.saveFile(conf.targetSvgFile, svgContent.join("\n"), "SVG");
+        svgSymbolBuilder.saveFile(conf.targetJsFile, svgSymbolBuilder.buildJSFile(svgContent), "JS");
+        svgSymbolBuilder.saveFile(conf.targetIndexFile, svgSymbolBuilder.buildIndexPage().join("\n"), "INDEX");
 
         if (conf.isMissedFile) {
             console.error("Build finished, but some files are not found. Please check the parameter: svgList.");
             process.exit(1);
         }
+
         console.log("Build success.");
+        return svgContent.join("\n");
     }
 });
 
