@@ -9,10 +9,14 @@
 
 const svgBuilder = require("./svgSymbolBuilder"),
     path = require("path");
+const momentum_path = require.resolve('momentum-abstract');
+const momentum_icon_path  =  path.resolve(momentum_path, '../icon');
+const momentum_illustration_path  =  path.resolve(momentum_path, '../illustration');
 
 // Example1: Direct dobuild with parameters
 svgBuilder.doBuild({
     namespace: "icons1",
+    svgSource: momentum_icon_path,
     targetFolder: path.resolve(__dirname, "dist"),
     targetSvgFile: "icons1.svg",
     targetJsFile: "icons1.js",
@@ -35,6 +39,7 @@ svgBuilder.doBuild({
 // Example2: Setup and dobuild
 svgBuilder.setup({
     namespace: "icons2",
+    svgSource: momentum_icon_path,
     targetFolder: path.resolve(__dirname, "dist"),
     targetSvgFile: "icons2.svg",
     targetJsFile: "icons2.js",
@@ -58,6 +63,7 @@ svgBuilder.doBuild();
 
 // Example3: No svgList, dobuild all icons, only JS symbol file
 svgBuilder.doBuild({
+    svgSource: momentum_illustration_path,
     namespace: "icons3",
     targetFolder: path.resolve(__dirname, "dist"),
     targetSvgFile: null,
