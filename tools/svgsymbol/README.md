@@ -1,20 +1,31 @@
 # momentum-constructor-svgsymbol
+
 Build to svgsymbol and generate index page of icons.
 
-## Using
+## Usage
+
 Require `svgSymbolBuilder.js` and run `doBuild()` to build icons to svg symbol file or JS version of symbol.
 
+`doBuild()` will return a content string.
+
 ## Example
+
 Require the tool, to provide path parameters, require node path module too.
 ```javascript
-const svgBuilder = require("./svgSymbolBuilder"),
-    path = require("path");
+
+const svgBuilder = require("./svgSymbolBuilder");
+const path = require("path");
+const momentum_path = require.resolve('momentum-abstract');
+const momentum_icon_path  =  path.resolve(momentum_path, '../icon');
+const momentum_illustration_path  =  path.resolve(momentum_path, '../illustration');
 ```
 
 ### Example1: Direct dobuild with parameters
+
 ```javascript
-svgBuilder.doBuild({
+const svgContent = svgBuilder.doBuild({
     namespace: "icons1",
+    svgSource: momentum_icon_path,
     targetFolder: path.resolve(__dirname, "dist"),
     targetSvgFile: "icons1.svg",
     targetJsFile: "icons1.js",
@@ -36,9 +47,11 @@ svgBuilder.doBuild({
 ```
 
 ### Example2: Setup and dobuild
+
 ```javascript
 svgBuilder.setup({
     namespace: "icons2",
+    svgSource: momentum_icon_path,
     targetFolder: path.resolve(__dirname, "dist"),
     targetSvgFile: "icons2.svg",
     targetJsFile: "icons2.js",
@@ -58,13 +71,15 @@ svgBuilder.setup({
         "q-a_bold"
     ]
 });
-svgBuilder.doBuild();
+const svgContent = svgBuilder.doBuild();
 ```
 
 ### Example3: No svgList, dobuild all icons, only JS symbol file
+
 ```javascript
-svgBuilder.doBuild({
+const svgContent = svgBuilder.doBuild({
     namespace: "icons3",
+    svgSource: momentum_illustration_path,
     targetFolder: path.resolve(__dirname, "dist"),
     targetSvgFile: null,
     targetJsFile: "icons3.js",
