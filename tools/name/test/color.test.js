@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
 const { convertors } = require('../dist/index');
-let packagePath = path.dirname(require.resolve('momentum-abstract'));
 let myConvertor;
 let outputPath = path.resolve(__dirname,'./output/color');
 let newIcons = [];
@@ -10,7 +9,7 @@ describe("Test Color",()=>{
 
     beforeAll(() => {
         myConvertor = convertors.color({
-            input: path.resolve(packagePath, 'color'),
+            type: 'color',
             output: outputPath,
             replacement: {
                 token: {

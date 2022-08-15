@@ -11,7 +11,7 @@ describe("Test illustration",()=>{
 
     beforeAll(() => {
         myConvertor = convertors.illustration({
-            input: path.resolve(packagePath, '../illustration'),
+            type: 'illustration',
             output: outputPath,
             replacement: {
                 fileName: {

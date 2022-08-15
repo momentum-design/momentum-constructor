@@ -11,7 +11,7 @@ describe("Test Icon",()=>{
 
     beforeAll(() => {
         myConvertor = convertors.icon({
-            input: path.resolve(packagePath, 'icon'),
+            type: 'icon',
             output: outputPath,
             replacement: {
                 fileName: {

@@ -13,6 +13,12 @@ You can go to ```./test``` to check the detail usage.
 # reader
 
 ```
+import { reader } from 'momentum-constructor-common';
+```
+
+or
+
+```
 const { reader } = require('momentum-constructor-common');
 ```
 
@@ -126,6 +132,12 @@ Create a regular expression using an array of filenames.
 # Types
 
 ```
+import { MomentumAbstractType } from 'momentum-constructor-common';
+```
+
+or
+
+```
 const { MomentumAbstractType } = require('momentum-constructor-common');
 ```
 
@@ -151,7 +163,7 @@ const { MomentumAbstractType } = require('momentum-constructor-common');
 |  prop        | type        | description                    |
 | :----------- | :---------: | :----------------------------  |
 | path         | string      |  the full file path            |
-| content      | string      |  file content                  |
+| content      | any         |  file content                  |
 | contentCode  | ?string     |  code type                     |
 | name         | string      |  file name without extension   |
 | fullName     | string      |  file name with extension      |

@@ -10,7 +10,7 @@ export enum MomentumAbstractType {
 
 export interface IFile {
     path: string;
-    content: string;
+    content: any;
     contentCode?: string;
     name: string;
     fullName: string;

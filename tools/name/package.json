@@ -1,10 +1,10 @@
 {
 	"name": "momentum-constructor-name",
-	"version": "1.0.2",
+	"version": "1.1.0",
 	"description": "tools for format momentum-abstract data name",
 	"main": "dist/index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"test": "jest",
 		"build": "rm -rf ./dist/ && tsc",
 		"init-build": "npm install && npm run build"
 	},
@@ -27,8 +27,8 @@
 		"yargs-parser": "20.2.6"
 	},
 	"dependencies": {
-		"write": "^2.0.0",
-		"momentum-abstract": "^1.0.5"
+		"momentum-constructor-common": "^1.0.4",
+		"write": "^2.0.0"
 	},
 	"publishConfig": {
 		"access": "public"
