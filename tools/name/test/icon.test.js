@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const { convertors } = require('../dist/index');
-let packagePath = require.resolve('momentum-abstract');
+let packagePath = path.dirname(require.resolve('momentum-abstract'));
 
 let myConvertor;
 let outputPath = path.resolve(__dirname,'./output/icon');
@@ -11,7 +11,7 @@ describe("Test Icon",()=>{
 
     beforeAll(() => {
         myConvertor = convertors.icon({
-            input: path.resolve(packagePath, '../icon'),
+            input: path.resolve(packagePath, 'icon'),
             output: outputPath,
             replacement: {
                 fileName: {
