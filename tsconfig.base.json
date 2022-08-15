@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist",
+    "declaration": true,
     "noImplicitReturns": true,
     "moduleResolution": "node",
     "importHelpers": true,
