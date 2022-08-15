@@ -2,6 +2,8 @@
 
 momentum-constructor-name is a tool to format momentum-abstract's token name or file name.
 
+## [Release Nots](./ReleaseNote.md)
+
 ## Install
 
 ```npm i momentum-constructor-name```
@@ -11,9 +13,8 @@ momentum-constructor-name is a tool to format momentum-abstract's token name or 
 ```
 const convertors = require('momentum-constructor-name');
 const path = require('path');
-let packagePath = require.resolve('momentum-abstract');
 let files = convertors.color({
-    input: path.resolve(packagePath, '../color'),
+    type: 'color',
     output: path.resolve(__dirname,'./output/color'),
     flat: true, // default false
     replacement: {
@@ -47,9 +48,8 @@ You can use ```convertors[type]()``` to create the instance to start work.
 ```
 const convertors = require('momentum-constructor-name');
 const path = require('path');
-let packagePath = require.resolve('momentum-abstract');
 myConvertor = convertors.color({
-    input: path.resolve(packagePath, '../color'),
+    type: 'color',
     output: path.resolve(__dirname,'./output/color'),
     flat: true, // default false
     replacement: {
@@ -77,12 +77,12 @@ myConvertor = convertors.color({
 
 + IOption
 
-|  prop        | type        | description                    |
-| :----------- | :---------: | :----------------------------: |
-| input        | string      |  the source file directory     |
-| output       | string      |  the output directory          |
-| flat         | boolean     |  if remove extra layer in json |
-| replacement  | ojbect      |  the rules of replacement      |
+|  prop        | type                    | description                    |
+| :----------- | :---------------------: | :---------------------------- |
+| type          | MomentumAbstractType   |  Check in [momentum-constructor-common](https://github.com/momentum-design/momentum-constructor/tree/main/tools/common#momentumabstracttype---for-reserved-name-not-use)    |
+| output       | string                  |  the output directory          |
+| flat         | boolean                 |  if remove extra layer in json |
+| replacement  | ojbect                  |  the rules of replacement      |
 
 + replacement
 
@@ -120,7 +120,7 @@ Object.values(myConvertor.files).forEach((file)=>{
 
 ### rename
 
-Rename all the files under input foldirectoryder and save them into output directory. This method will not change the token name.
+Rename all the files and save them into output directory. This method will not change the token name.
 
 + usage
 
@@ -130,7 +130,7 @@ myConvertor.rename();
 
 ### save
 
-Rename all the files under input directory and save them into output directory. This method will change the token name.
+Rename all the files and save them into output directory. This method will change the token name.
 
 + usage
 
