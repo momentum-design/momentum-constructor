@@ -68,7 +68,7 @@ export class Convertor {
             const newName = this.replace(file.fullName, this.options.replacement?.fileName);
             const ext = path.extname(newName);
             this.files[newName] = Object.assign(file, {
-                path: path.join(this.options.output, newName),
+                path: path.join(this.options.output || '', newName),
                 name: path.basename(newName, ext),
                 fullName: newName,
                 extensionName: ext
