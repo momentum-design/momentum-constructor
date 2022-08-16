@@ -10,45 +10,29 @@ momentum-constructor-name is a tool to format momentum-abstract's token name or 
 
 ## Usage
 
-```
-const convertors = require('momentum-constructor-name');
-const path = require('path');
-let files = convertors.color({
-    type: 'color',
-    output: path.resolve(__dirname,'./output/color'),
-    flat: true, // default false
-    replacement: {
-        token: {
-            pattern: /\-/g,
-            words: '@'
-        },
-        fileName: {
-            pattern: /c/g,
-            words: 'a'
-        }
-    }
-}).convert();
-
-Object.values(files).forEach((file)=>{
-    /*
-        your code
-        file.content
-        file.path
-    */
-});
+### import
 
 ```
+    const { Convertor } = require('momentum-constructor-name');
+```
+
+or
+
+```
+    import { Convertor } = from'momentum-constructor-name';
+```
+
 
 ## Convertors
 
-You can use ```convertors[type]()``` to create the instance to start work.
+You can use ```Convertor``` to create the instance to start work.
 
 + usage
 
 ```
-const convertors = require('momentum-constructor-name');
+const { Convertor } = require('momentum-constructor-name');
 const path = require('path');
-myConvertor = convertors.color({
+myConvertor = new Convertor({
     type: 'color',
     output: path.resolve(__dirname,'./output/color'),
     flat: true, // default false
@@ -64,14 +48,6 @@ myConvertor = convertors.color({
     }
 });
 ```
-
-### Types
-
-|  type        | file name  | token name |
-| :----------- | :--------: | :--------: |
-| icon         |      ✓     |      ✗     |
-| illustration |      ✓     |      ✗     |
-| color        |      ✓     |      ✓     |
 
 ### Options
 
@@ -79,7 +55,7 @@ myConvertor = convertors.color({
 
 |  prop        | type                    | description                    |
 | :----------- | :---------------------: | :---------------------------- |
-| type          | MomentumAbstractType   |  Check in [momentum-constructor-common](https://github.com/momentum-design/momentum-constructor/tree/main/tools/common#momentumabstracttype---for-reserved-name-not-use)    |
+| type          | MomentumAbstractType   |  Check in [momentum-constructor-common](https://github.com/momentum-design/momentum-constructor/tree/main/tools/common#enum)    |
 | output       | string                  |  the output directory          |
 | flat         | boolean                 |  if remove extra layer in json |
 | replacement  | ojbect                  |  the rules of replacement      |
@@ -108,7 +84,6 @@ This method will return a json object. The key of return object is file path whi
 
 ```
 myConvertor.convert();
-
 Object.values(myConvertor.files).forEach((file)=>{
     /*
         your code

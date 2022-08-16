@@ -2,7 +2,7 @@
 
 Init
 
-# Version 1.1.0
+# Version 1.0.3
 
 Use ```momentum-constructor-common``` to rebuild the core.
 
@@ -21,3 +21,13 @@ Use ```momentum-constructor-common``` to rebuild the core.
 + No need to import momentum-abstract 's path
 
 + Add momentum-abstract in dependencies
+
+# Version 1.1.0
+
+Rebuild API
+
+## API Change
+
++ All convertor is same.
+
++ Use new instance to create convertor.

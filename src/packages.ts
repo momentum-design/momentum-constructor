@@ -102,7 +102,7 @@ class PackagesFactory {
                             if(online && online.latest) {
                                 _package.onlineVersion = online.latest;
                                 const nextOnlineVersion =  this.nextVersion(_package.onlineVersion);
-                                if(this.ifUpdateLocalVersion(_package.onlineVersion, nextOnlineVersion)) {
+                                if(this.ifUpdateLocalVersion(_package.localVersion, nextOnlineVersion)) {
                                     _package.localVersion =  _package.fileContent.version = nextOnlineVersion;
                                     write.sync(_package.filePath, JSON.stringify(_package.fileContent, null, '\t'), { overwrite: true });
                                 }   

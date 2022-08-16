@@ -1,6 +1,6 @@
 {
 	"name": "momentum-constructor-name",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"description": "tools for format momentum-abstract data name",
 	"main": "dist/index.js",
 	"scripts": {
@@ -27,7 +27,7 @@
 		"yargs-parser": "20.2.6"
 	},
 	"dependencies": {
-		"momentum-constructor-common": "^1.0.4",
+		"momentum-constructor-common": "^1.0.5",
 		"write": "^2.0.0"
 	},
 	"publishConfig": {
