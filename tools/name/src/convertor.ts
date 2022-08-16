@@ -1,11 +1,12 @@
 
-import { IOptions, IReplacementItem } from '../types';
-import { reader, IFile } from 'momentum-constructor-common';
+import { IOptions, IReplacementItem } from './types';
+import { reader, IFile, MomentumAbstractType } from 'momentum-constructor-common';
 const fs = require('fs');
 const path = require('path');
 const write = require('write');
 const regIsFoldPath = new RegExp(path.sep + '$');
 const regIsConvertFile = /^.json$/i;
+const regObject = /^\[Object Object\]$/i;
 
 export class Convertor {
 
@@ -34,13 +35,23 @@ export class Convertor {
 
     //need override
     isEndNode(item):boolean {
-        return !Array.isArray(item) && !this.isOjbect(item);
+        switch(this.options.type) {
+            case MomentumAbstractType.color:
+                return (typeof item.hex === 'string' && item.rgba!==undefined) || (item.colors !==undefined && item.type!==undefined);
+            case MomentumAbstractType.font:
+                return typeof item.fontSize === 'number';
+            default:
+                return !Array.isArray(item) && !this.isOjbect(item);
+        }
     }
 
-    flat(json:any):Record<string,any> {
-        const ret = {};
-        this._flat(ret, json);
-        return  ret;
+    flat(json:any) {
+        Object.keys(json).forEach((key)=>{
+            const _newJson = {};
+            this._flat(_newJson , json[key]);
+            json[key] = _newJson;
+        });
+        return json;
     }
 
     convert() {
@@ -128,7 +139,7 @@ export class Convertor {
     }
 
     private isOjbect(obj:any) {
-        return Object. prototype. toString. call(obj) === '[Object Object]';
+        return regObject.test(Object.prototype.toString.call(obj));
     }
 
 }

@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { convertors } = require('../dist/index');
+const { Convertor } = require('../dist/index');
 let myConvertor;
 let outputPath = path.resolve(__dirname,'./output/color');
 let newIcons = [];
@@ -8,7 +8,7 @@ let newIcons = [];
 describe("Test Color",()=>{
 
     beforeAll(() => {
-        myConvertor = convertors.color({
+        myConvertor = new Convertor({
             type: 'color',
             output: outputPath,
             replacement: {
