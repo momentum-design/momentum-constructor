@@ -19,7 +19,7 @@ momentum-constructor-name is a tool to format momentum-abstract's token name or 
 or
 
 ```
-    import { Convertor } = from'momentum-constructor-name';
+    import { Convertor } from 'momentum-constructor-name';
 ```
 
 
