@@ -104,7 +104,7 @@ async function init() {
     fontPath: '.',
     content: ['src/**/*.{ts,scss,html}'],
     tokenRegExp: {
-      help: '  ',
+      help: 'https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp',
       source: pattern.source,
       flags: pattern.flags
     },
