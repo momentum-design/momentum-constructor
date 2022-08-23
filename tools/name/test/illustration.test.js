@@ -1,7 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const { convertors } = require('../dist/index');
-let packagePath = require.resolve('momentum-abstract');
+const { Convertor } = require('../dist/index');
 
 let myConvertor;
 let outputPath = path.resolve(__dirname,'./output/illustration');
@@ -10,8 +9,8 @@ let newIcons = [];
 describe("Test illustration",()=>{
 
     beforeAll(() => {
-        myConvertor = convertors.illustration({
-            input: path.resolve(packagePath, '../illustration'),
+        myConvertor =  new Convertor({
+            type: 'illustration',
             output: outputPath,
             replacement: {
                 fileName: {

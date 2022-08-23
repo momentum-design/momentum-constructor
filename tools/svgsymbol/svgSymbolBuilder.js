@@ -13,7 +13,6 @@ let fs = require("fs"),
     baseUrl = __dirname,
     packagePath = require.resolve("momentum-abstract"),
     conf = {
-        svgSource: path.resolve(packagePath, "../icon"),
         blackListTags: ["symbol", "title", "desc", "use", "script"],
         isMissedFile: false
     };
@@ -36,6 +35,7 @@ Object.assign(svgSymbolBuilder, {
      */
     setup: function (config) {
         config = config || {};
+        config.svgSource = config.svgSource || path.dirname(__dirname);
         conf.namespace = config.namespace || "cisco";
         conf.targetFolder = config.targetFolder || path.resolve(baseUrl, "dist");
         conf.targetSvgFile = config.targetSvgFile === null ? null : path.resolve(conf.targetFolder, config.targetSvgFile || "icons.svg");

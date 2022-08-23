@@ -1,3 +1,5 @@
+import { MomentumAbstractType, IFile } from 'momentum-constructor-common';
+
 export interface IReplacement {
     token: IReplacementItem;
     fileName: IReplacementItem;
@@ -9,13 +11,8 @@ export interface IReplacementItem {
 };
 
 export interface IOptions {
-    input: string;
-    output:string;
+    type: MomentumAbstractType;
+    output?:string;
     replacement?:  IReplacement;
     flat?:boolean;
-}
-
-export interface IFile {
-    path: string;
-    content: any;
 }

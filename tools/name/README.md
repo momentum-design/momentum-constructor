@@ -2,54 +2,38 @@
 
 momentum-constructor-name is a tool to format momentum-abstract's token name or file name.
 
+## [Release Nots](./ReleaseNote.md)
+
 ## Install
 
 ```npm i momentum-constructor-name```
 
 ## Usage
 
-```
-const convertors = require('momentum-constructor-name');
-const path = require('path');
-let packagePath = require.resolve('momentum-abstract');
-let files = convertors.color({
-    input: path.resolve(packagePath, '../color'),
-    output: path.resolve(__dirname,'./output/color'),
-    flat: true, // default false
-    replacement: {
-        token: {
-            pattern: /\-/g,
-            words: '@'
-        },
-        fileName: {
-            pattern: /c/g,
-            words: 'a'
-        }
-    }
-}).convert();
-
-Object.values(files).forEach((file)=>{
-    /*
-        your code
-        file.content
-        file.path
-    */
-});
+### import
 
 ```
+    const { Convertor } = require('momentum-constructor-name');
+```
+
+or
+
+```
+    import { Convertor } from 'momentum-constructor-name';
+```
+
 
 ## Convertors
 
-You can use ```convertors[type]()``` to create the instance to start work.
+You can use ```Convertor``` to create the instance to start work.
 
 + usage
 
 ```
-const convertors = require('momentum-constructor-name');
+const { Convertor } = require('momentum-constructor-name');
 const path = require('path');
-let packagePath = require.resolve('momentum-abstract');
-myConvertor = convertors.color({
-    input: path.resolve(packagePath, '../color'),
+myConvertor = new Convertor({
+    type: 'color',
     output: path.resolve(__dirname,'./output/color'),
     flat: true, // default false
     replacement: {
@@ -64,25 +48,17 @@ myConvertor = convertors.color({
     }
 });
 ```
-
-### Types
-
-|  type        | file name  | token name |
-| :----------- | :--------: | :--------: |
-| icon         |      ✓     |      ✗     |
-| illustration |      ✓     |      ✗     |
-| color        |      ✓     |      ✓     |
 
 ### Options
 
 + IOption
 
-|  prop        | type        | description                    |
-| :----------- | :---------: | :----------------------------: |
-| input        | string      |  the source file directory     |
-| output       | string      |  the output directory          |
-| flat         | boolean     |  if remove extra layer in json |
-| replacement  | ojbect      |  the rules of replacement      |
+|  prop        | type                    | description                    |
+| :----------- | :---------------------: | :---------------------------- |
+| type          | MomentumAbstractType   |  Check in [momentum-constructor-common](https://github.com/momentum-design/momentum-constructor/tree/main/tools/common#enum)    |
+| output       | string                  |  the output directory          |
+| flat         | boolean                 |  if remove extra layer in json |
+| replacement  | ojbect                  |  the rules of replacement      |
 
 + replacement
 
@@ -108,7 +84,6 @@ This method will return a json object. The key of return object is file path whi
 
 ```
 myConvertor.convert();
-
 Object.values(myConvertor.files).forEach((file)=>{
     /*
         your code
@@ -120,7 +95,7 @@ Object.values(myConvertor.files).forEach((file)=>{
 
 ### rename
 
-Rename all the files under input foldirectoryder and save them into output directory. This method will not change the token name.
+Rename all the files and save them into output directory. This method will not change the token name.
 
 + usage
 
@@ -130,7 +105,7 @@ myConvertor.rename();
 
 ### save
 
-Rename all the files under input directory and save them into output directory. This method will change the token name.
+Rename all the files and save them into output directory. This method will change the token name.
 
 + usage
 

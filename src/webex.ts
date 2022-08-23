@@ -3,7 +3,8 @@ import { IProcessArgs } from './type';
 const https = require('https');
 
 export const WEBEX_SPACES = {
-    'webex api text': '38a7a410-d4c1-11ec-8ada-b1058fbde9fb'
+    'webex api text': '38a7a410-d4c1-11ec-8ada-b1058fbde9fb',
+    'INNER pioneers': '3817ad60-d764-11ec-b810-b30990163f39'
 };
 
 export class Webex {
