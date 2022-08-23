@@ -41,13 +41,14 @@ Object.assign(svgSymbolBuilder, {
      *      }
      * }
      */
-    setup: function(config) {
+    setup: function (config) {
         config = config || {};
         conf.namespace = config.namespace || "cisco";
         conf.targetFolder = config.targetFolder || path.join(process.cwd(), "dist");
-        conf.targetSvgFile = config.targetSvgFile === null ? null : path.join(conf.targetFolder, config.targetSvgFile || "icons.svg");
-        conf.targetJsFile = config.targetJsFile === null ? null : path.join(conf.targetFolder, config.targetJsFile || "icons.js");
-        conf.targetIndexFile = config.targetIndexFile === null ? null : path.join(conf.targetFolder, config.targetIndexFile || "index.html");
+        conf.targetSvgFile = config.targetSvgFile === null ? null : path.join(conf.targetFolder, config.targetSvgFile || "default.svg");
+        conf.targetJsFile = config.targetJsFile === null ? null : path.join(conf.targetFolder, config.targetJsFile || "default.js");
+        conf.jsFileName = config.targetJsFile || "default.js";
+        conf.targetIndexFile = config.targetIndexFile === null ? null : path.join(conf.targetFolder, config.targetIndexFile || "default.html");
 
         conf.svgList = config.svgList || { icon: "all", local: "all" };
         conf.sourceList = config.sourceList || { local: baseUrl };
@@ -71,7 +72,7 @@ Object.assign(svgSymbolBuilder, {
         return svgFullList;
     },
 
-    getSvgfileList: function(type, svgList, sourcePath) {
+    getSvgfileList: function (type, svgList, sourcePath) {
         let nameList = [],
             idList = [];
         if (Array.isArray(svgList) && svgList.length > 0) {
@@ -90,11 +91,11 @@ Object.assign(svgSymbolBuilder, {
         });
     },
 
-    isEmptyTag: function($tag) {
+    isEmptyTag: function ($tag) {
         return JSON.stringify($tag.attr()) === "{}" && !$tag.children().length;
     },
 
-    fetchSymbol: function(item) {
+    fetchSymbol: function (item) {
         let file = item.path,
             fileContent;
 
@@ -126,7 +127,7 @@ Object.assign(svgSymbolBuilder, {
         return beautify(symbolContent.join(""));
     },
 
-    buildSymbol: function() {
+    buildSymbol: function () {
         let svgContent = ['<svg xmlns="http://www.w3.org/2000/svg">'];
         Object.keys(conf.svgFullList).forEach((type) => {
             let svgList = conf.svgFullList[type];
@@ -138,32 +139,33 @@ Object.assign(svgSymbolBuilder, {
         return svgContent;
     },
 
-    getSymbolSize: function(name) {
+    getSymbolSize: function (name) {
         let size = svgSymbolBuilder.getSize(name);
         [size.h, size.w] = size.w > 180 ? [(size.h / size.w) * 180, 180] : [size.h, size.w];
         [size.w, size.h] = size.h > 100 ? [(size.w / size.h) * 100, 100] : [size.w, size.h];
         return ' style="width: ' + size.w + "px; height: " + size.h + 'px;"';
     },
 
-    getContainerWidth: function(name) {
+    getContainerWidth: function (name) {
         let size = svgSymbolBuilder.getSize(name);
         return size.w > 100 ? ' style="width: ' + (size.w > 180 ? 180 : size.w) + 'px"' : "";
     },
 
-    getSize: function(name) {
+    getSize: function (name) {
         let [x, y, w, h] = conf.viewBox[name].split(" ");
         return { w, h };
     },
 
-    buildIndexPage: function() {
+    buildIndexPage: function () {
         let indexContent = [
             "<!DOCTYPE html>",
             '<html lang="en"><head><meta charset="UTF-8"><title>Lib Icons Index</title>',
             "<style>",
             "svg{display:block;margin:10px auto;}",
             ".icon-type-icon svg{transition-property:fill;transition-duration:.5s;fill:BlueViolet;}",
-            ".icon-pack{border: 1px solid #666;border-radius: 10px;width: 100px;display: inline-block;overflow: hidden;margin: 5px;background: #444;}",
+            ".icon-pack{border: 1px solid #666;border-radius: 10px;width: 100px;display: inline-block;overflow: hidden;margin: 5px;background: #999;}",
             ".icon-type-icon .icon-pack{background: #a1a1a1cc;}",
+            ".icon-type-illustration .icon-pack{background: #444;}",
             ".title {font: 9pt/9pt arial;text-align: center;background: #CCC;padding: 6px 2px;}",
             ".icon-pack-title{font: bold 40px/50px Verdana;border-top: 3px solid #333;margin: 20px 10px 10px;}",
             'body{background:url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 8 8"><path fill="rgb(192,192,192)" d="M0 0L4 0L4 8L8 8L8 4L0 4Z"/></svg>\') repeat}',
@@ -182,7 +184,7 @@ Object.assign(svgSymbolBuilder, {
             indexContent.push("</div>");
         });
         indexContent.push("</body></html>");
-        indexContent.push('<script src="' + conf.targetJsFile + '"></script>');
+        indexContent.push('<script src="' + conf.jsFileName + '"></script>');
         indexContent.push("<script>");
         indexContent.push(
             'document.body.insertAdjacentHTML("afterBegin", "<div style=\\"width:0;height:0;position:absolute;right:0;\\">" + window.' +
@@ -195,7 +197,7 @@ Object.assign(svgSymbolBuilder, {
         return indexContent;
     },
 
-    buildJSFile: function(svgContent) {
+    buildJSFile: function (svgContent) {
         return [
             "window." + conf.namespace + " = window." + conf.namespace + " || {};",
             "window." + conf.namespace + ".svgSymbol = [",
@@ -208,14 +210,14 @@ Object.assign(svgSymbolBuilder, {
         ].join("\n");
     },
 
-    saveFile: function(name, content, type) {
+    saveFile: function (name, content, type) {
         if (name) {
             console.log(`Saving ${type} file to ${name}`);
             fs.writeFileSync(name, content, { encoding: "utf8" });
         }
     },
 
-    doBuild: function(config) {
+    doBuild: function (config) {
         if (!conf.targetFolder || typeof config === "object") {
             svgSymbolBuilder.setup(config);
         }
