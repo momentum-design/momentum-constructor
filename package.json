@@ -17,9 +17,6 @@
   },
   "homepage": "https://github.com/momentum-design/momentum-constructor#readme",
   "devDependencies": {
-    "cheerio": "^1.0.0-rc.12",
-    "momentum-abstract": "^1.0.12",
-    "momentum-constructor-svgsymbol": "^1.0.2",
-    "xml-beautifier": "^0.5.0"
+    "momentum-constructor-svgsymbol": "^1.1.1"
   }
 }
