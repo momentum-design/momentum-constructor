@@ -2,7 +2,7 @@ const svgBuilder = require("../svgSymbolBuilder");
 
 describe("Test interface",()=>{
 
-    test('read color path', () => {
+    test('Is interface exist', () => {
         expect(typeof svgBuilder.doBuild === "function").toBeTruthy();
     });
 });
