@@ -1,26 +1,26 @@
 {
-  "name": "momentum-constructor-font-icon",
-  "version": "1.0.0",
-  "description": "Build the webfonts & glyph tokens ( for tools like tailwindcss ).",
-  "main": "dist/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "bin": {
-    "momentum-constructor-font-icon": "bin/momentum-constructor-font-icon.js"
-  },
-  "files": [
-    "src",
-    "bin"
-  ],
-  "repository": "https://github.com/momentum-design/momentum-constructor.git",
-  "author": "Ivan Chen",
-  "license": "ISC",
-  "dependencies": {
-    "@momentum-ui/webfonts-generator": "^2.3.2",
-    "fast-glob": "^3.2.11",
-    "momentum-abstract": "^1.0.12",
-    "xml2js": "^0.4.23",
-    "yargs": "^17.5.1"
-  }
+	"name": "momentum-constructor-font-icon",
+	"version": "1.0.1",
+	"description": "Build the webfonts & glyph tokens ( for tools like tailwindcss ).",
+	"main": "dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"bin": {
+		"momentum-constructor-font-icon": "bin/momentum-constructor-font-icon.js"
+	},
+	"files": [
+		"src",
+		"bin"
+	],
+	"repository": "https://github.com/momentum-design/momentum-constructor.git",
+	"author": "Ivan Chen",
+	"license": "ISC",
+	"dependencies": {
+		"@momentum-ui/webfonts-generator": "^2.3.2",
+		"fast-glob": "^3.2.11",
+		"momentum-abstract": "^1.0.12",
+		"xml2js": "^0.4.23",
+		"yargs": "^17.5.1"
+	}
 }
