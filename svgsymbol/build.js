@@ -8,9 +8,13 @@
  */
 
 const svgBuilder = require("momentum-constructor-svgsymbol"),
-    path = require("path");
+    path = require("path"),
+    fs = require("fs");
 
-svgBuilder.doBuild({ targetFolder: path.resolve(__dirname), targetJsFile: "icons.js", targetIndexFile: "icons.html", svgList: { icon: "all" } });
-svgBuilder.doBuild({ targetFolder: path.resolve(__dirname), targetJsFile: "color.js", targetIndexFile: "color.html", svgList: { "icon-colored": "all" } });
-svgBuilder.doBuild({ targetFolder: path.resolve(__dirname), targetJsFile: "brand.js", targetIndexFile: "brand.html", svgList: { "icon-brand": "all" } });
-svgBuilder.doBuild({ targetFolder: path.resolve(__dirname), targetJsFile: "illus.js", targetIndexFile: "illus.html", svgList: { illustration: "all" } });
+svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "icons.js", targetIndexFile: "icons.html", svgList: { icon: "all" } });
+svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "color.js", targetIndexFile: "color.html", svgList: { "icon-colored": "all" } });
+svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "brand.js", targetIndexFile: "brand.html", svgList: { "icon-brand": "all" } });
+svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "illus.js", targetIndexFile: "illus.html", svgList: { illustration: "all" } });
+
+fs.unlinkSync(path.join(__dirname, "icons.svg"));
+
