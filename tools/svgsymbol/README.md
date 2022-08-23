@@ -56,6 +56,9 @@ svgBuilder.doBuild({
     sourceList: {
         local: __dirname
     },
+    sourceList: {
+        local: __dirname
+    },
     svgList: {
         icon: { // Provide a list 
             alert_bold: "v2_notification_bold_32",
