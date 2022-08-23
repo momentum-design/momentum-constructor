@@ -2,6 +2,10 @@
 
 Build to svgsymbol and generate index page of icons.
 
+## Install
+
+```npm i momentum-constructor-svgsymbol```
+
 ## Usage
 
 Require `svgSymbolBuilder.js` and run `doBuild()` to build icons to svg symbol file or JS version of symbol.
