@@ -1,7 +1,1 @@
-node_modules/
-yarn.lock
-yarn-error.log
-output/
-dist/
-**/.DS_Store
-.npmrc
+/node_modules
