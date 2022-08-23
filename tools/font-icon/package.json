@@ -20,6 +20,7 @@
     "@momentum-ui/webfonts-generator": "^2.3.2",
     "fast-glob": "^3.2.11",
     "momentum-abstract": "^1.0.12",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.4.23",
+    "yargs": "^17.5.1"
   }
 }
