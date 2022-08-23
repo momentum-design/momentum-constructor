@@ -25,7 +25,7 @@ Also, `svgSymbolBuilder.doBuild(parameters)` will return the svg symbol content 
          customType1: pathToFile,
          customType2: pathToFile,
          ...
-     }
+     },
    svgList: object, define icon list
      {
          type: {icon list} | [icon list] | "all", // momentum type is "icon", "icon-brand", "icon-colored", "illustration"
