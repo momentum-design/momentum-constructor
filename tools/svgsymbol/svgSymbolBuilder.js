@@ -3,7 +3,7 @@
  * @Description
  * @Author Xiaole Tao <xiaolet@cisco.com>
  * @Date 2022/8/3
- * @Update 2022/8/5
+ * @Update 2022/8/23
  */
 
 let fs = require("fs"),
@@ -237,6 +237,5 @@ Object.assign(svgSymbolBuilder, {
 });
 
 module.exports = {
-    setup: svgSymbolBuilder.setup,
     doBuild: svgSymbolBuilder.doBuild
 };
