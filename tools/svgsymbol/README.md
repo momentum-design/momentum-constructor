@@ -8,18 +8,22 @@ Build to svgsymbol and generate index page of icons.
 
 ## Usage
 
-Require `svgSymbolBuilder.js` and run `doBuild()` to build icons to svg symbol file or JS version of symbol.
+```javascript
+const svgSymbolBuilder = require("momentum-constructor-svgsymbol");
+svgSymbolBuilder.doBuild({
 
-Also, `svgSymbolBuilder.doBuild(parameters)` will return the svg symbol content as a string.
+})
+```
+Require `momentum-constructor-svgsymbol` and calling `doBuild` method with parameters, allow to save build result to svg symbol file or JS file, and generete index file, also, the methon will return the svg symbol content as string.
 
 ## Parameters
 ```Javascript
 {
    namespace: string, // default is "cisco"
    taretFolder: string, // default is "[current folder]/dist"
-   targetSvgFile: string, // default is "icons.svg"
-   targetJsFile: string, // default is "icons.js"
-   targetIndexFile: string, // default is "index.html"
+   targetSvgFile: string, // null or not set will not save svg file
+   targetIndexFile: string, // null or not set will not save index file
+   targetJsFile: string, // it is dependency of index file, default is "default.js", allow to do not save js file wehen targetIndexFile not set
    sourceList: object, // define external svg folder
      {
          customType1: pathToFile,
@@ -43,7 +47,7 @@ Also, `svgSymbolBuilder.doBuild(parameters)` will return the svg symbol content 
 Require the tool, to provide path parameters, require node path module too.
 ```javascript
 
-const svgBuilder = require("./svgSymbolBuilder");
+const svgBuilder = require("momentum-constructor-svgsymbol");
 const path = require("path");
 
 // Example: Do build with parameters
