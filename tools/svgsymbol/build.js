@@ -12,11 +12,11 @@ const svgBuilder = require("./svgSymbolBuilder"),
 
 // Example: Do build with parameters
 svgBuilder.doBuild({
-    namespace: "icons1",
+    namespace: "example",
     targetFolder: path.resolve(__dirname, "dist"),
-    targetSvgFile: "icons1.svg",
-    targetJsFile: "icons1.js",
-    targetIndexFile: "icon1.html",
+    targetSvgFile: "example.svg",
+    targetJsFile: "example.js",
+    targetIndexFile: "example.html",
     sourceList: {
         local: __dirname
     },

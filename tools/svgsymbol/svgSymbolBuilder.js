@@ -22,12 +22,12 @@ const svgSymbolBuilder = new Function();
 Object.assign(svgSymbolBuilder, {
     /**
      * @param {*} config - {
-     *    namespace: string, default is "cisco"
-     *    taretFolder: string, default is "[current folder]/dist"
-     *    targetSvgFile: string, default is "icons.svg"
-     *    targetJsFile: string, default is "icons.js"
-     *    targetIndexFile: string, default is "index.html"
-     *    sourceList: object, customer svg path.
+     * namespace: string, // default is "cisco"
+     * taretFolder: string, // default is "[current folder]/dist"
+     * targetSvgFile: string, // null or not set will not save svg file
+     * targetIndexFile: string, // null or not set will not save index file
+     * targetJsFile: string, // it is dependency of index file, default is "default.js", allow to do not save js file wehen targetIndexFile not set
+     * sourceList: object, // define external svg folder
      *      {
      *          customType: pathToFile
      *          ...
@@ -45,10 +45,13 @@ Object.assign(svgSymbolBuilder, {
         config = config || {};
         conf.namespace = config.namespace || "cisco";
         conf.targetFolder = config.targetFolder || path.join(process.cwd(), "dist");
-        conf.targetSvgFile = config.targetSvgFile === null ? null : path.join(conf.targetFolder, config.targetSvgFile || "default.svg");
-        conf.targetJsFile = config.targetJsFile === null ? null : path.join(conf.targetFolder, config.targetJsFile || "default.js");
+        conf.targetSvgFile = config.targetSvgFile ? path.join(conf.targetFolder, config.targetSvgFile) : null;
+        conf.targetIndexFile = config.targetIndexFile ? path.join(conf.targetFolder, config.targetIndexFile) : null;
+        if (config.targetIndexFile) {
+            config.targetJsFile = config.targetJsFile || "default.js";
+        }
+        conf.targetJsFile = config.targetJsFile ? path.join(conf.targetFolder, config.targetJsFile) : null;
         conf.jsFileName = config.targetJsFile || "default.js";
-        conf.targetIndexFile = config.targetIndexFile === null ? null : path.join(conf.targetFolder, config.targetIndexFile || "default.html");
 
         conf.svgList = config.svgList || { icon: "all", local: "all" };
         conf.sourceList = config.sourceList || { local: baseUrl };
