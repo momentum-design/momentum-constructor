@@ -25,25 +25,36 @@ class Reader {
         return path.resolve(momentum_path, momentumType.toString());
     }
 
+    isRightFile(fileName:string, filter?:IFileFilter):boolean {
+        if(filter) {
+            let isNotInBlackList = !filter.blacklist || this.isNotInList(fileName, filter.blacklist);
+            let isInWhitelist = !filter.whitelist || this.isInList(fileName, filter.whitelist);
+            return isNotInBlackList && isInWhitelist;
+        }
+        return true;
+    }
+
+    scanFile(parent:string, root:string, data:Record<string, string>, filter?:IFileFilter) {
+        if(fs.existsSync(parent)) {
+            const list = fs.readdirSync(parent);
+            list.forEach((fileName)=>{
+                const _path = path.join(parent, fileName);
+                const stat = fs.lstatSync(_path);
+                const _shortPath = path.relative(root, _path);
+                if(stat.isDirectory()) {
+                    this.scanFile(_path, root, data, filter);
+                } else if(stat.isFile() && this.isRightFile(_shortPath, filter)) {
+                    data[_shortPath] = fileName;
+                }
+            });
+        }
+    }
+
     list(momentumType:MomentumAbstractType, filter?:IFileFilter):string[] {
         const folder = this.path(momentumType);
-        let fileNameList=[];
-        if(fs.existsSync(folder)) {
-            fileNameList = fs.readdirSync(folder);
-        }
-        if(filter) {
-            if(filter.blacklist) {
-                fileNameList = fileNameList.filter((name) => {
-                    return this.isNotInList(name, filter.blacklist);
-                });
-            }
-            if(filter.whitelist) {
-                fileNameList = fileNameList.filter((name) => {
-                    return this.isInList(name, filter.whitelist);
-                });
-            }
-        }
-        return fileNameList;
+        const data = {};
+        this.scanFile(folder, folder, data, filter);
+        return Object.keys(data);
     }
 
     files(momentumType:MomentumAbstractType, filter?:IFileFilter): Record<string, IFile> {
