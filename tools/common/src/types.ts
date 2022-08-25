@@ -5,7 +5,7 @@ export enum MomentumAbstractType {
     icon = 'icon',
     'icon-colored' = 'icon-colored',
     'icon-brand' = 'icon-brand',
-    audio = 'audio'
+    sonic = 'sonic'
 }
 
 export interface IFile {
