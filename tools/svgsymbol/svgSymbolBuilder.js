@@ -110,6 +110,9 @@ Object.assign(svgSymbolBuilder, {
             return "";
         }
 
+        //prifix to IDs
+        fileContent = fileContent.replace(/(url\(#| id=")/g, "$1" + item.id + "-");
+ 
         let $ = cheerio.load(fileContent, { normalizeWhitespace: false, xmlMode: true }),
             svg = $("svg"),
             children = svg.children(),
