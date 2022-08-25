@@ -1,6 +1,6 @@
 {
 	"name": "momentum-constructor-common",
-	"version": "1.0.5",
+	"version": "1.0.6",
 	"description": "common tools for format momentum-abstract data name",
 	"main": "dist/index.js",
 	"scripts": {
