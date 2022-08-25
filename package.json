@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/momentum-design/momentum-constructor#readme",
   "devDependencies": {
-    "momentum-constructor-svgsymbol": "^1.1.1"
+    "momentum-abstract": "^1.0.12",
+    "momentum-constructor-svgsymbol": "^1.1.2"
   }
 }

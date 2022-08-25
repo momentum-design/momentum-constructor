@@ -16,5 +16,3 @@ svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "color.js", targetIn
 svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "brand.js", targetIndexFile: "brand.html", svgList: { "icon-brand": "all" } });
 svgBuilder.doBuild({ targetFolder: __dirname, targetJsFile: "illus.js", targetIndexFile: "illus.html", svgList: { illustration: "all" } });
 
-fs.unlinkSync(path.join(__dirname, "icons.svg"));
-
