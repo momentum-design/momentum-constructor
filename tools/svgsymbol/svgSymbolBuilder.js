@@ -17,9 +17,10 @@ let fs = require("fs"),
         blackListTags: ["symbol", "title", "desc", "use", "script"]
     };
 
-const svgSymbolBuilder = new Function();
+const SMB = new Function();
+SMB.conf = conf;
 
-Object.assign(svgSymbolBuilder, {
+Object.assign(SMB, {
     /**
      * @param {*} config - {
      * namespace: string, // default is "cisco"
@@ -41,7 +42,7 @@ Object.assign(svgSymbolBuilder, {
      *      }
      * }
      */
-    setup: function (config) {
+    setup(config) {
         config = config || {};
         conf.namespace = config.namespace || "cisco";
         conf.targetFolder = config.targetFolder || path.join(process.cwd(), "dist");
@@ -51,13 +52,12 @@ Object.assign(svgSymbolBuilder, {
             config.targetJsFile = config.targetJsFile || "default.js";
         }
         conf.targetJsFile = config.targetJsFile ? path.join(conf.targetFolder, config.targetJsFile) : null;
-        conf.jsFileName = config.targetJsFile || "default.js";
 
         conf.svgList = config.svgList || { icon: "all", local: "all" };
         conf.sourceList = config.sourceList || { local: baseUrl };
 
         if (!fs.existsSync(conf.targetFolder)) fs.mkdirSync(conf.targetFolder);
-        conf.svgFullList = svgSymbolBuilder.parseList();
+        conf.svgFullList = SMB.parseList();
 
         conf.viewBox = {};
         conf.symbolFill = {};
@@ -67,15 +67,15 @@ Object.assign(svgSymbolBuilder, {
         let svgFullList = {};
         Object.keys(conf.svgList).forEach((item) => {
             if (conf.abstractType.includes(item)) {
-                svgFullList[item] = svgSymbolBuilder.getSvgfileList(item, conf.svgList[item], path.join(conf.abstractPath, item));
+                svgFullList[item] = SMB.getSvgfileList(item, conf.svgList[item], path.join(conf.abstractPath, item));
             } else {
-                svgFullList[item] = svgSymbolBuilder.getSvgfileList(item, conf.svgList[item], conf.sourceList[item] || baseUrl);
+                svgFullList[item] = SMB.getSvgfileList(item, conf.svgList[item], conf.sourceList[item] || baseUrl);
             }
         });
         return svgFullList;
     },
 
-    getSvgfileList: function (type, svgList, sourcePath) {
+    getSvgfileList(type, svgList, sourcePath) {
         let nameList = [],
             idList = [];
         if (Array.isArray(svgList) && svgList.length > 0) {
@@ -89,16 +89,14 @@ Object.assign(svgSymbolBuilder, {
                 .filter((name) => fs.statSync(path.resolve(sourcePath, name)).isFile() && name.match(/^(.*)\.svg$/))
                 .map((name) => name.replace(/\.svg$/, ""));
         }
-        return nameList.map((name, index) => {
-            return { type: type, path: path.join(sourcePath, name + ".svg"), icon: name, id: idList[index] || name };
-        });
+        return nameList.map((name, index) => ({ type: type, path: path.join(sourcePath, name + ".svg"), icon: name, id: idList[index] || name }));
     },
 
-    isEmptyTag: function ($tag) {
+    isEmptyTag($tag) {
         return JSON.stringify($tag.attr()) === "{}" && !$tag.children().length;
     },
 
-    fetchSymbol: function (item) {
+    fetchSymbol(item) {
         let file = item.path,
             fileContent;
 
@@ -112,7 +110,7 @@ Object.assign(svgSymbolBuilder, {
 
         //prifix to IDs
         fileContent = fileContent.replace(/(url\(#| id=")/g, "$1" + item.id + "-");
- 
+
         let $ = cheerio.load(fileContent, { normalizeWhitespace: false, xmlMode: true }),
             svg = $("svg"),
             children = svg.children(),
@@ -125,7 +123,7 @@ Object.assign(svgSymbolBuilder, {
 
         for (let i = 0; i < children.length; i++) {
             let child = children.eq(i);
-            if (!conf.blackListTags.includes(children.get(i).tagName) && !svgSymbolBuilder.isEmptyTag(child)) {
+            if (!conf.blackListTags.includes(children.get(i).tagName) && !SMB.isEmptyTag(child)) {
                 symbolContent.push($.html(child));
             }
         }
@@ -133,77 +131,77 @@ Object.assign(svgSymbolBuilder, {
         return beautify(symbolContent.join(""));
     },
 
-    buildSymbol: function () {
+    buildSymbol() {
         let svgContent = ['<svg xmlns="http://www.w3.org/2000/svg">'];
         Object.keys(conf.svgFullList).forEach((type) => {
             let svgList = conf.svgFullList[type];
             svgList.forEach((item) => {
-                svgContent.push(svgSymbolBuilder.fetchSymbol(item));
+                svgContent.push(SMB.fetchSymbol(item));
             });
         });
         svgContent.push("</svg>");
         return svgContent;
     },
 
-    getSymbolSize: function (name) {
-        let size = svgSymbolBuilder.getSize(name);
+    getSymbolSize(name) {
+        let size = SMB.getSize(name);
         [size.h, size.w] = size.w > 180 ? [(size.h / size.w) * 180, 180] : [size.h, size.w];
         [size.w, size.h] = size.h > 100 ? [(size.w / size.h) * 100, 100] : [size.w, size.h];
         return ' style="width: ' + size.w + "px; height: " + size.h + 'px;"';
     },
 
-    getContainerWidth: function (name) {
-        let size = svgSymbolBuilder.getSize(name);
+    getContainerWidth(name) {
+        let size = SMB.getSize(name);
         return size.w > 100 ? ' style="width: ' + (size.w > 180 ? 180 : size.w) + 'px"' : "";
     },
 
-    getSize: function (name) {
+    getSize(name) {
         let [x, y, w, h] = conf.viewBox[name].split(" ");
         return { w, h };
     },
 
-    buildIndexPage: function () {
-        let indexContent = [
-            "<!DOCTYPE html>",
-            '<html lang="en"><head><meta charset="UTF-8"><title>Lib Icons Index</title>',
-            "<style>",
-            "svg{display:block;margin:10px auto;}",
-            ".icon-type-icon svg{transition-property:fill;transition-duration:.5s;fill:BlueViolet;}",
-            ".icon-pack{border: 1px solid #666;border-radius: 10px;width: 100px;display: inline-block;overflow: hidden;margin: 5px;background: #999;}",
-            ".icon-type-icon .icon-pack{background: #a1a1a1cc;}",
-            ".icon-type-illustration .icon-pack{background: #444;}",
-            ".title {font: 9pt/9pt arial;text-align: center;background: #CCC;padding: 6px 2px;}",
-            ".icon-pack-title{font: bold 40px/50px Verdana;border-top: 3px solid #333;margin: 20px 10px 10px;}",
-            'body{background:url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 8 8"><path fill="rgb(192,192,192)" d="M0 0L4 0L4 8L8 8L8 4L0 4Z"/></svg>\') repeat}',
-            "</style>",
-            "</head><body>"
-        ];
-        Object.keys(conf.svgFullList).forEach((type) => {
-            let svgList = conf.svgFullList[type];
-            indexContent.push('<div class="icon-type-' + type + '"><div class="icon-pack-title">' + type + "</div>");
-            svgList.forEach((item) => {
-                indexContent.push('<div class="icon-pack"' + svgSymbolBuilder.getContainerWidth(item.icon) + ">");
-                indexContent.push('<div class="title">' + item.id + "</div>");
-                indexContent.push("<svg " + svgSymbolBuilder.getSymbolSize(item.icon) + '><use xlink:href="#' + item.id + '"/></svg>');
-                indexContent.push("</div>");
-            });
-            indexContent.push("</div>");
-        });
-        indexContent.push("</body></html>");
-        indexContent.push('<script src="' + conf.jsFileName + '"></script>');
-        indexContent.push("<script>");
-        indexContent.push(
-            'document.body.insertAdjacentHTML("afterBegin", "<div style=\\"width:0;height:0;position:absolute;right:0;\\">" + window.' +
-                conf.namespace +
-                ".svgSymbol + '</div>');"
-        );
-        indexContent.push('var cl=["Yellow","GreenYellow","Lime","DarkSlateGray","BlueViolet"];');
-        indexContent.push("window.setInterval(function(){cl.push(cl.shift());document.styleSheets[0].cssRules[1].style.fill=cl[0];},15000);");
-        indexContent.push("</script>");
-        return indexContent;
+    locatePosition(template, sub) {
+        let ss = template.indexOf(`<!-- ${sub} Start Placeholder -->`),
+            es = template.indexOf(`<!-- ${sub} End Placeholder -->`);
+        return [ss, ss + sub.length + 28, es, es + sub.length + 26];
     },
 
-    buildJSFile: function (svgContent) {
+    getSubTemplate(template, sub) {
+        let [ss, se, es, ee] = SMB.locatePosition(template, sub);
+        return template.slice(se, es).trimEnd();
+    },
+
+    replaceTemplate(template, sub, replaceStr) {
+        let [ss, se, es, ee] = SMB.locatePosition(template, sub);
+        return [template.slice(0, ss), replaceStr, template.slice(ee)].join("\n");
+    },
+
+    buildIndexPage() {
+        let template = fs.readFileSync(path.join(__dirname, "template.html"), { encoding: "utf8" }),
+            typeTemp = SMB.getSubTemplate(template, "Type"),
+            packTemp = SMB.getSubTemplate(typeTemp, "Pack"),
+            theme = { icon: "anicolor", "icon-brand": "light", "icon-colored": "light", illustration: "dark" },
+            types = [];
+
+        template = SMB.replaceTemplate(template, "Script", `<script src="${path.basename(conf.targetJsFile)}"></script>`);
+        template = template.replace(/%namespace%/g, conf.namespace);
+        Object.keys(conf.svgFullList).forEach((type) => {
+            let svgList = conf.svgFullList[type],
+                newType = typeTemp.replace(/%theme%/, theme[type] || "light"),
+                packs = [];
+            svgList.forEach((item) => {
+                let newPack = packTemp;
+                newPack = newPack.replace(/%width%/g, SMB.getContainerWidth(item.icon));
+                newPack = newPack.replace(/%iconRefer%/g, item.id);
+                newPack = newPack.replace(/style="[^"]+"/, SMB.getSymbolSize(item.icon));
+                packs.push(newPack);
+            });
+            types.push(SMB.replaceTemplate(newType.replace(/%type%/g, type), "Pack", packs.join("\n")));
+        });
+        return SMB.replaceTemplate(template, "Type", types.join("\n"));
+    },
+
+    buildJSFile(svgContent) {
         return [
             "window." + conf.namespace + " = window." + conf.namespace + " || {};",
             "window." + conf.namespace + ".svgSymbol = [",
@@ -216,23 +214,20 @@ Object.assign(svgSymbolBuilder, {
         ].join("\n");
     },
 
-    saveFile: function (name, content, type) {
+    saveFile(name, content, type) {
         if (name) {
             console.log(`Saving ${type} file to ${name}`);
             fs.writeFileSync(name, content, { encoding: "utf8" });
         }
     },
 
-    doBuild: function (config) {
-        if (!conf.targetFolder || typeof config === "object") {
-            svgSymbolBuilder.setup(config);
-        }
+    doBuild(config) {
+        SMB.setup(config);
 
-        let svgContent = svgSymbolBuilder.buildSymbol();
-
-        svgSymbolBuilder.saveFile(conf.targetSvgFile, svgContent.join("\n"), "SVG");
-        svgSymbolBuilder.saveFile(conf.targetJsFile, svgSymbolBuilder.buildJSFile(svgContent), "JS");
-        svgSymbolBuilder.saveFile(conf.targetIndexFile, svgSymbolBuilder.buildIndexPage().join("\n"), "INDEX");
+        let svgContent = SMB.buildSymbol();
+        conf.targetSvgFile && SMB.saveFile(conf.targetSvgFile, svgContent.join("\n"), "SVG");
+        conf.targetJsFile && SMB.saveFile(conf.targetJsFile, SMB.buildJSFile(svgContent), "JS");
+        conf.targetIndexFile && SMB.saveFile(conf.targetIndexFile, SMB.buildIndexPage(), "INDEX");
 
         if (conf.isMissedFile) {
             console.error("Build finished, but some files are not found. Please check the parameter: svgList.");
@@ -245,5 +240,6 @@ Object.assign(svgSymbolBuilder, {
 });
 
 module.exports = {
-    doBuild: svgSymbolBuilder.doBuild
+    _svgSymbolBuilder: SMB,
+    doBuild: SMB.doBuild
 };
