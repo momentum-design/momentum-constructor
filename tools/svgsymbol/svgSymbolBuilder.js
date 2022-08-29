@@ -179,7 +179,7 @@ Object.assign(SMB, {
         let template = fs.readFileSync(path.join(__dirname, "template.html"), { encoding: "utf8" }),
             typeTemp = SMB.getSubTemplate(template, "Type"),
             packTemp = SMB.getSubTemplate(typeTemp, "Pack"),
-            theme = { icon: "anicolor", "icon-brand": "light", "icon-colored": "light", illustration: "dark" },
+            theme = { icon: "light", "icon-brand": "light", "icon-colored": "light", illustration: "dark" },
             types = [];
 
         template = SMB.replaceTemplate(template, "Script", `<script src="${path.basename(conf.targetJsFile)}"></script>`);
@@ -190,9 +190,9 @@ Object.assign(SMB, {
                 packs = [];
             svgList.forEach((item) => {
                 let newPack = packTemp;
+                newPack = newPack.replace(/style="[^"]+"/, SMB.getSymbolSize(item.icon));
                 newPack = newPack.replace(/%width%/g, SMB.getContainerWidth(item.icon));
                 newPack = newPack.replace(/%iconRefer%/g, item.id);
-                newPack = newPack.replace(/style="[^"]+"/, SMB.getSymbolSize(item.icon));
                 packs.push(newPack);
             });
             types.push(SMB.replaceTemplate(newType.replace(/%type%/g, type), "Pack", packs.join("\n")));

@@ -34,7 +34,10 @@ svgBuilder.doBuild({
         },
         "icon-colored": "all", //special string "all" will build all svg under type into dist.
         "icon-brand": [], // empty list will do nothing of this type
-        illustration: {}, // empty object will do nothing of this type
+        illustration: {
+                "sharing-content-320_black": "v2_sharing-content-320_black",
+                "sharing-content-320_white": "v2_sharing-content-320_white"
+        },
         local: "all" // will found local svg from sourceList.local
     }
 });
