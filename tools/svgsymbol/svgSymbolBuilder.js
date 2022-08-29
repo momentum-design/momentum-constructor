@@ -179,14 +179,14 @@ Object.assign(SMB, {
         let template = fs.readFileSync(path.join(__dirname, "template.html"), { encoding: "utf8" }),
             typeTemp = SMB.getSubTemplate(template, "Type"),
             packTemp = SMB.getSubTemplate(typeTemp, "Pack"),
-            theme = { icon: "light", "icon-brand": "light", "icon-colored": "light", illustration: "dark" },
+            theme = { icon: "anicolor", illustration: "dark" },
             types = [];
 
         template = SMB.replaceTemplate(template, "Script", `<script src="${path.basename(conf.targetJsFile)}"></script>`);
         template = template.replace(/%namespace%/g, conf.namespace);
         Object.keys(conf.svgFullList).forEach((type) => {
             let svgList = conf.svgFullList[type],
-                newType = typeTemp.replace(/%theme%/, theme[type] || "light"),
+                newType = typeTemp.replace(/%theme%/, theme[type] || ""),
                 packs = [];
             svgList.forEach((item) => {
                 let newPack = packTemp;
