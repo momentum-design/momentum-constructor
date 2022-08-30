@@ -44,7 +44,7 @@ function replaceLast(str, ch, cr) {
   return `${str.substring(0, lp)}${cr}${str.substring(lp + 1)}`;
 }
 
-async function generateSVGPattern(svgPath, content, tokenRegExp) {
+async function generateSVGPattern(svgPath, content, tokenRegExp, isProd) {
   if (!isProd) {
     return `${svgPath}/*.svg`;
   }
@@ -71,8 +71,11 @@ async function generateIconsJson(fontName, fontPath, tokenPath) {
     return [`icon-${name}`, codePointHex]
   })
   
-  const iconsJson = Object.fromEntries(glyphs);
-  const tokenFile = `${tokenPath}/icons.json`
+  return Object.fromEntries(glyphs);
+}
+
+async function writeIconsJson(iconsJson, tokenPath) {
+  const tokenFile = path.resolve(tokenPath, 'icons.json')
   await fs.writeFile(tokenFile, JSON.stringify(iconsJson, null, 2), 'utf-8');
 }
 
@@ -81,22 +84,26 @@ async function loadSvgFont(file) {
   return await xml2js.parseStringPromise(svgFile);
 }
 
-async function build(){
-  let config;
+async function build(_config, _isProd = isProd, _dry = false){
+  let config = _config;
   try {
-    config = require(path.resolve(configFile));
+    if (!config) {
+      config = require(path.resolve(configFile));
+    }
   } catch(e) {
     console.error(`Please run 'npx ${NAME} --i', before build!`)
     return
   }
 
   const { svgPath, fontName, fontPath, content, tokenRegExp, tokenPath } = config;
-  const svgPattern = await generateSVGPattern(svgPath, content, tokenRegExp);
+  const svgPattern = await generateSVGPattern(svgPath, content, tokenRegExp, _isProd);
   await generateFonts(fontName, svgPattern, fontPath, {ts: Date.now(), fontHeight: 1000});
-  await generateIconsJson(fontName, fontPath, tokenPath);
+
+  const iconsJson = await generateIconsJson(fontName, fontPath);
+  return _dry ? iconsJson : await writeIconsJson(iconsJson, tokenPath);
 }
 
-async function init() {
+async function init(_dry = false) {
   const pattern = /tw-icon-([\w-]+)/g;
   const config = {
     svgPath: 'node_modules/momentum-abstract/icon',
@@ -110,7 +117,8 @@ async function init() {
     },
     tokenPath: '.', 
   }
-  await fs.writeFile(configFile, `module.exports = ${JSON.stringify(config, null, 2)}`, 'utf-8');
+  
+  return _dry ? config : await fs.writeFile(configFile, `module.exports = ${JSON.stringify(config, null, 2)}`, 'utf-8');
 }
 
 module.exports = {
