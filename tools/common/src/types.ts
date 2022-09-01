@@ -11,8 +11,8 @@ export enum MomentumAbstractType {
 export interface IFile {
     path: string;
     content: any;
-    contentCode?: string;
     name: string;
+    dir: string;
     fullName: string;
     extensionName: string;
 }
@@ -21,3 +21,10 @@ export interface IFileFilter {
     whitelist?: RegExp[],
     blacklist?: RegExp[],
 }
+
+export interface IReplacementItem {
+    pattern: string | RegExp;
+    words: string | any;
+};
+
+

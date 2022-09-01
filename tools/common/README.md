@@ -10,16 +10,18 @@ momentum-constructor-common is a tool to offer common modules for momentum-const
 
 You can go to ```./test``` to check the detail usage.
 
-# reader
+# mfs
+
+```mfs``` is a file system mode in momentum-constructor-common.
 
 ```
-import { reader } from 'momentum-constructor-common';
+import { mfs } from 'momentum-constructor-common';
 ```
 
 or
 
 ```
-const { reader } = require('momentum-constructor-common');
+const { mfs } = require('momentum-constructor-common');
 ```
 
 ## path
@@ -43,13 +45,13 @@ Get the full path of where you installed momentum-abstract.
 + read momentum-abstract/color path
 
 ```
-const pathString = reader.path(MomentumAbstractType.color);
+const pathString = mfs.path(MomentumAbstractType.color);
 ```
 
 + read momentum-abstract/icon path
 
 ```
-const pathString = reader.path(MomentumAbstractType.icon);
+const pathString = mfs.path(MomentumAbstractType.icon);
 ```
 
 ## list
@@ -74,21 +76,18 @@ Get a file name list from momentum-abstract.
 + read momentum-abstract/color list
 
 ```
-const files = reader.list(MomentumAbstractType.color);
+const files = mfs.list(MomentumAbstractType.color);
 ```
 
 + read momentum-abstract/color list with filter
 
 ```
-const coreReg = reader.getRegFromNames(['core.json']);
-const themeReg = reader.getRegFromNames(['theme.json']);
-let files = reader.list(MomentumAbstractType.color, {
-    blacklist: [coreReg, themeReg],
+let files = mfs.list(MomentumAbstractType.color, {
     whitelist: [/.json$/i]
 });
 ```
 
-## files
+## read
 
 Get a list of files from momentum-abstract.
 
@@ -110,7 +109,21 @@ Get a list of files from momentum-abstract.
 + read momentum-abstract/color json files
 
 ```
-let files = reader.files(MomentumAbstractType.color);
+let files = mfs.read(MomentumAbstractType.color);
+```
+
+# mcommon
+
+```mcommon``` is a common mode in momentum-constructor-common.
+
+```
+import { mcommon } from 'momentum-constructor-common';
+```
+
+or
+
+```
+const { mcommon } = require('momentum-constructor-common');
 ```
 
 ## getRegFromNames
@@ -121,13 +134,83 @@ Create a regular expression using an array of filenames.
 
 |  name        | type                 | description                    |
 | :----------- | :------------------: | :----------------------------  |
-| fileNameList | string[]             | The list of file nam           |
+| fileNameList | string[]             | The list of file name          |
 
 ### return
 
 | type                 | description                    |
 | :------------------: | :----------------------------  |
 | RegExp               | RegExp for filter              |
+
+## getRegFromNamesSafe
+
+getRegFromNamesSafe has the same arguments and return with getRegFromNames. RegExp has a max-length limitation, we do some check in this function.
+
+# mconvert
+
+```mconvert``` offers the feature to convert momentum files'name and content.
+
+```
+import { mconvert } from 'momentum-constructor-common';
+```
+
+or
+
+```
+const { mconvert } = require('momentum-constructor-common');
+```
+
+## renameFile
+
+rename all the files
+
+### arguments
+
+|  name         | type                 | description                    |
+| :------------ | :------------------: | :----------------------------  |
+| mometnumFiles | Record<string, IFile>| the file from mfs.read         |
+| replacement   | IReplacementItem     | replacement                    |
+
+### return
+
+| type                 | description                    |
+| :------------------: | :----------------------------  |
+| Record<string, IFile>| RegExp for filter              |
+
+## renameToken
+
+rename the token in the content
+
+### arguments
+
+|  name         | type                 | description                    |
+| :------------ | :------------------: | :----------------------------  |
+| mometnumFiles | Record<string, IFile>| the file from mfs.read         |
+| replacement   | IReplacementItem     | replacement                    |
+| momentumType  | MomentumAbstractType | The data type                  |
+### return
+
+| type                 | description                    |
+| :------------------: | :----------------------------  |
+| Record<string, IFile>| RegExp for filter              |
+
+## flat
+
+flat the content
+
+### arguments
+
+|  name         | type                 | description                    |
+| :------------ | :------------------: | :----------------------------  |
+| mometnumFiles | Record<string, IFile>| the file from mfs.read         |
+| momentumType  | MomentumAbstractType | The data type                  |
+### return
+
+| type                 | description                    |
+| :------------------: | :----------------------------  |
+| Record<string, IFile>| RegExp for filter              |
+
+
 
 # Types
 
@@ -153,7 +236,7 @@ const { MomentumAbstractType } = require('momentum-constructor-common');
 | icon         |  normal icons                  |
 | icon-colored |  colored icons                 |
 | icon-brand   |  brand icons                   |
-| audio (*)    |  sound effect                  |
+| sonic        |  sound effect                  |
 
 
 ## Interface & Type
@@ -183,3 +266,10 @@ const { MomentumAbstractType } = require('momentum-constructor-common');
 | :----------- | :---------:  | :----------------  |
 | whitelist    | RegExp[]     | only return files whose filename matches the condition           |
 | blacklist    | RegExp[]     | only return files whose filename does not match the condition    |
+
+### IReplacementItem
+
+|  prop        | type            | description        |
+| :----------- | :------------:  | :----------------  |
+| pattern      | string | RegExp | which part you want to replace |
+| words        | string | any    | the new wording |
