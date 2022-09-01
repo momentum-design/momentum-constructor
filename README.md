@@ -16,10 +16,6 @@ All the momentum-constructor package is under ```./tools```.
 
 Common modules, including reading momentum-abstract files and momentum-abstract types.
 
-### [momentum-constructor-name](./tools/name/README.md)
-
-A tool to rename files or json node.
-
 ### [momentum-constructor-svgsymbol](./tools/svgsymbol/README.md)
 
 A tool to build icons into svg symbol.
