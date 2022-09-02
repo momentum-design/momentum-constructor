@@ -42,6 +42,22 @@
                 position: absolute;
                 right: 0;
             }
+            .filter {
+                position: fixed;
+                right: 40px;
+                font-size: 14px;
+                top: 20px;
+                background: #fff;
+                border-radius: 10px;
+                padding: 6px;
+                border: 1px solid #ccc;
+            }
+
+            .filter input {
+                width: 120px;
+                height: 20px;
+                font-size: 14px;
+            }
         </style>
     </head>
     <body>
@@ -56,6 +72,7 @@
             <!-- Pack End Placeholder -->
         </div>
         <!-- Type End Placeholder -->
+        <div class="filter">Filter：<input type="text" /></div>
     </body>
 </html>
 <!-- Script Start Placeholder -->
@@ -79,11 +96,11 @@
         ].join("");
     document.body.style.background = `url('data:image/svg+xml;utf8,${backSvg}') repeat`;
     document.body.insertAdjacentHTML("afterBegin", hiddenSymbol);
-    window.setInterval(function () {
+    window.setInterval(function() {
         colorList.push(colorList.shift());
         document.styleSheets[0].cssRules[0].style.fill = colorList[0];
     }, 10000);
-    document.body.addEventListener("click", function (e) {
+    document.body.addEventListener("click", function(e) {
         if (e.target.classList.contains("title")) {
             if (window.getSelection) {
                 var selection = window.getSelection();
@@ -93,5 +110,19 @@
                 selection.addRange(range);
             }
         }
+    });
+    let items = Array.from(document.querySelectorAll(".icon-pack")),
+        titles = Array.from(document.querySelectorAll(".icon-pack-title")),
+        filterInput = document.querySelector("input"),
+        optList = items.map((i) => [i, i.innerText]);
+
+    filterInput.addEventListener("keyup", function() {
+        let reg = new RegExp(filterInput.value);
+        titles.forEach((item) => {
+            item.style.display = filterInput.value === "" ? "block" : "none";
+        });
+        optList.forEach((item) => {
+            item[0].style.display = item[1].match(reg) ? "inline-block" : "none";
+        });
     });
 </script>

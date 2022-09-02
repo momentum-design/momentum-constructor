@@ -36,7 +36,11 @@ svgBuilder.doBuild({
         "icon-brand": [], // empty list will do nothing of this type
         illustration: {
                 "sharing-content-320_black": "v2_sharing-content-320_black",
-                "sharing-content-320_white": "v2_sharing-content-320_white"
+                "sharing-content-320_white": "v2_sharing-content-320_white",
+                "people-headshot-wavy-hair-m-120_black": "v2_people_headshot_black_72",
+                "people-headshot-wavy-hair-m-120_white": "v2_people_headshot_white_72",
+                "people-headshot-wavy-hair-s-120_black": "v2_people_headshot_black_48",
+                "people-headshot-wavy-hair-s-120_white": "v2_people_headshot_white_48"  
         },
         local: "all" // will found local svg from sourceList.local
     }
