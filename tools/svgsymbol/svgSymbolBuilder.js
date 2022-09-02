@@ -143,20 +143,11 @@ Object.assign(SMB, {
     },
 
     getSymbolSize(name) {
-        let size = SMB.getSize(name);
+        let [x, y, w, h] = conf.viewBox[name].split(" "),
+            size = { w: +w - +x, h: +h - +y };
         [size.h, size.w] = size.w > 180 ? [(size.h / size.w) * 180, 180] : [size.h, size.w];
         [size.w, size.h] = size.h > 100 ? [(size.w / size.h) * 100, 100] : [size.w, size.h];
-        return ' style="width: ' + size.w + "px; height: " + size.h + 'px;"';
-    },
-
-    getContainerWidth(name) {
-        let size = SMB.getSize(name);
-        return size.w > 100 ? ' style="width: ' + (size.w > 180 ? 180 : size.w) + 'px"' : "";
-    },
-
-    getSize(name) {
-        let [x, y, w, h] = conf.viewBox[name].split(" ");
-        return { w, h };
+        return { w: Math.round(size.w), h: Math.round(size.h) };
     },
 
     locatePosition(template, sub) {
@@ -189,9 +180,10 @@ Object.assign(SMB, {
                 newType = typeTemp.replace(/%theme%/, theme[type] || ""),
                 packs = [];
             svgList.forEach((item) => {
-                let newPack = packTemp;
-                newPack = newPack.replace(/style="[^"]+"/, SMB.getSymbolSize(item.icon));
-                newPack = newPack.replace(/%width%/g, SMB.getContainerWidth(item.icon));
+                let newPack = packTemp,
+                    size = SMB.getSymbolSize(item.icon);
+                newPack = newPack.replace(/style="[^"]+"/, `style="width: ${size.w}px; height: ${size.h};"`);
+                newPack = newPack.replace(/%width%/g, `style="width: ${Math.max(size.w + 10, 100)}px;"`);
                 newPack = newPack.replace(/%iconRefer%/g, item.id);
                 packs.push(newPack);
             });
