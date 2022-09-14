@@ -88,7 +88,7 @@ Object.assign(SMB, {
                 .filter((name) => fs.statSync(path.resolve(sourcePath, name)).isFile() && name.match(/^(.*)\.svg$/))
                 .map((name) => name.replace(/\.svg$/, ""));
         }
-        return nameList.map((name, index) => ({ type: type, path: path.join(sourcePath, name + ".svg"), icon: name, id: idList[index] || name }));
+        return nameList.map((name, index) => ({ type: type, path: path.join(sourcePath, `${name}.svg`), icon: name, id: idList[index] || name }));
     },
 
     isEmptyTag($tag) {
@@ -102,13 +102,13 @@ Object.assign(SMB, {
         if (fs.existsSync(file) && fs.statSync(file).isFile()) {
             fileContent = fs.readFileSync(file, { encoding: "utf8" });
         } else {
-            console.error("Missing file: " + file);
+            console.error(`Missing file: ${file}`);
             conf.isMissedFile = true;
             return "";
         }
 
         //prifix to IDs
-        fileContent = fileContent.replace(/(url\(#| id=")/g, "$1" + item.id + "-");
+        fileContent = fileContent.replace(/(url\(#| id=")/g, `$1${item.id}-`);
 
         let $ = cheerio.load(fileContent, { normalizeWhitespace: false, xmlMode: true }),
             svg = $("svg"),
@@ -117,8 +117,8 @@ Object.assign(SMB, {
             fill;
         conf.viewBox[item.icon] = svg.attr("viewBox") || `0 0 ${svg.attr("width") || 32} ${svg.attr("height") || 32}`;
         svg.find("g,circle,ellipse,image,line,path,pattern,polygon,polyline,rect,text").removeAttr("id");
-        fill = ["icon-brand", "icon-colored", "illustration"].includes(item.type) ? ' fill="' + svg.attr("fill") + '"' : "";
-        symbolContent.push('<symbol id="' + item.id + '" viewBox="' + conf.viewBox[item.icon] + '"' + fill + ">");
+        fill = svg.attr("fill") !== "" ? ` fill="${svg.attr("fill")}"` : "";
+        symbolContent.push(`<symbol id="${item.id}" viewBox="${conf.viewBox[item.icon]}"${fill}>`);
 
         for (let i = 0; i < children.length; i++) {
             let child = children.eq(i);
@@ -194,12 +194,12 @@ Object.assign(SMB, {
 
     buildJSFile(svgContent) {
         return [
-            "window." + conf.namespace + " = window." + conf.namespace + " || {};",
-            "window." + conf.namespace + ".svgSymbol = [",
+            `window.${conf.namespace} = window.${conf.namespace} || {};`,
+            `window.${conf.namespace}.svgSymbol = [`,
             svgContent
                 .join("\n")
                 .split("\n")
-                .map((line) => "'" + line + "'")
+                .map((line) => `'${line}'`)
                 .join(",\n"),
             "].join('\\n');"
         ].join("\n");
