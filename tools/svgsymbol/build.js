@@ -22,6 +22,7 @@ svgBuilder.doBuild({
     },
     svgList: {
         icon: { // Provide a list 
+            no_this_file_test: "v2_test_file_not_exist",
             alert_bold: "v2_notification_bold_32",
             annotate_bold: "v2_annotate_bold_32",
             announcement_bold: "v2_feedback_bold_32",
@@ -39,8 +40,8 @@ svgBuilder.doBuild({
                 "sharing-content-320_white": "v2_sharing-content-320_white",
                 "people-headshot-wavy-hair-m-120_black": "v2_people_headshot_black_72",
                 "people-headshot-wavy-hair-m-120_white": "v2_people_headshot_white_72",
-                "people-headshot-wavy-hair-s-120_black": "v2_people_headshot_black_48",
-                "people-headshot-wavy-hair-s-120_white": "v2_people_headshot_white_48"  
+                "people-headshot-wavy-hair-s-60_black": "v2_people_headshot_black_48",
+                "people-headshot-wavy-hair-s-60_white": "v2_people_headshot_white_48"  
         },
         local: "all" // will found local svg from sourceList.local
     }

@@ -56,6 +56,7 @@ Object.assign(SMB, {
         conf.sourceList = config.sourceList || { local: baseUrl };
 
         if (!fs.existsSync(conf.targetFolder)) fs.mkdirSync(conf.targetFolder);
+        conf.svgMissingList = [];
         conf.svgFullList = SMB.parseList();
 
         conf.viewBox = {};
@@ -76,7 +77,8 @@ Object.assign(SMB, {
 
     getSvgfileList(type, svgList, sourcePath) {
         let nameList = [],
-            idList = [];
+            idList = [],
+            fileList = [];
         if (Array.isArray(svgList) && svgList.length > 0) {
             nameList = svgList;
         } else if (!Array.isArray(svgList) && typeof svgList === "object" && Object.getOwnPropertyNames(svgList).length > 0) {
@@ -88,7 +90,16 @@ Object.assign(SMB, {
                 .filter((name) => fs.statSync(path.resolve(sourcePath, name)).isFile() && name.match(/^(.*)\.svg$/))
                 .map((name) => name.replace(/\.svg$/, ""));
         }
-        return nameList.map((name, index) => ({ type: type, path: path.join(sourcePath, `${name}.svg`), icon: name, id: idList[index] || name }));
+
+        nameList.forEach((name, index) => {
+            let file = path.join(sourcePath, `${name}.svg`);
+            if (!fs.existsSync(file) || !fs.statSync(file).isFile()) {
+                conf.svgMissingList.push(file);
+            } else {
+                fileList.push({ type: type, path: file, name: name, id: idList[index] || name });
+            }
+        });
+        return fileList;
     },
 
     isEmptyTag($tag) {
@@ -97,15 +108,7 @@ Object.assign(SMB, {
 
     fetchSymbol(item) {
         let file = item.path,
-            fileContent;
-
-        if (fs.existsSync(file) && fs.statSync(file).isFile()) {
             fileContent = fs.readFileSync(file, { encoding: "utf8" });
-        } else {
-            console.error(`Missing file: ${file}`);
-            conf.isMissedFile = true;
-            return "";
-        }
 
         //prifix to IDs
         fileContent = fileContent.replace(/(url\(#| id=")/g, `$1${item.id}-`);
@@ -115,10 +118,10 @@ Object.assign(SMB, {
             children = svg.children(),
             symbolContent = [],
             fill;
-        conf.viewBox[item.icon] = svg.attr("viewBox") || `0 0 ${svg.attr("width") || 32} ${svg.attr("height") || 32}`;
+        conf.viewBox[item.name] = svg.attr("viewBox") || `0 0 ${svg.attr("width") || 32} ${svg.attr("height") || 32}`;
         svg.find("g,circle,ellipse,image,line,path,pattern,polygon,polyline,rect,text").removeAttr("id");
-        fill = svg.attr("fill") !== "" ? ` fill="${svg.attr("fill")}"` : "";
-        symbolContent.push(`<symbol id="${item.id}" viewBox="${conf.viewBox[item.icon]}"${fill}>`);
+        fill = svg.attr("fill") !== undefined ? ` fill="${svg.attr("fill")}"` : "";
+        symbolContent.push(`<symbol id="${item.id}" viewBox="${conf.viewBox[item.name]}"${fill}>`);
 
         for (let i = 0; i < children.length; i++) {
             let child = children.eq(i);
@@ -181,7 +184,7 @@ Object.assign(SMB, {
                 packs = [];
             svgList.forEach((item) => {
                 let newPack = packTemp,
-                    size = SMB.getSymbolSize(item.icon);
+                    size = SMB.getSymbolSize(item.name);
                 newPack = newPack.replace(/style="[^"]+"/, `style="width: ${size.w}px; height: ${size.h};"`);
                 newPack = newPack.replace(/%width%/g, `style="width: ${Math.max(size.w + 10, 100)}px;"`);
                 newPack = newPack.replace(/%iconRefer%/g, item.id);
@@ -220,8 +223,9 @@ Object.assign(SMB, {
         conf.targetJsFile && SMB.saveFile(conf.targetJsFile, SMB.buildJSFile(svgContent), "JS");
         conf.targetIndexFile && SMB.saveFile(conf.targetIndexFile, SMB.buildIndexPage(), "INDEX");
 
-        if (conf.isMissedFile) {
-            console.error("Build finished, but some files are not found. Please check the parameter: svgList.");
+        if (conf.svgMissingList.length) {
+            console.error("\033[31mBuild finished, but some files are not found. Please check the parameter: svgList.");
+            console.log(`${"\033[31m"}${conf.svgMissingList.join("\n")}${"\033[0m"}`);
             process.exit(1);
         }
 
