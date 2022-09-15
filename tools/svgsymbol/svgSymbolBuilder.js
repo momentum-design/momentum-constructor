@@ -224,8 +224,16 @@ Object.assign(SMB, {
         conf.targetIndexFile && SMB.saveFile(conf.targetIndexFile, SMB.buildIndexPage(), "INDEX");
 
         if (conf.svgMissingList.length) {
-            console.error("\033[31mBuild finished, but some files are not found. Please check the parameter: svgList.");
-            console.log(`${"\033[31m"}${conf.svgMissingList.join("\n")}${"\033[0m"}`);
+
+            console.log(" _       __                 _            ");
+            console.log("| |     / /___ __________  (_)___  ____ _");
+            console.log("| | /| / / __ `/ ___/ __ \\/ / __ \\/ __ `/");
+            console.log("| |/ |/ / /_/ / /  / / / / / / / / /_/ / ");
+            console.log("|__/|__/\\__,_/_/  /_/ /_/_/_/ /_/\\__, /  ");
+            console.log("                                /____/   ");
+            
+            console.error("Build finished, but some files are not found. Please check the parameter: svgList.");
+            console.log(conf.svgMissingList.join("\n"));
             process.exit(1);
         }
 
