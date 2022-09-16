@@ -4,7 +4,7 @@
   "description": "Page of momentum constructor",
   "main": "index.html",
   "scripts": {
-    "build": "momentum-constructor-svgsymbol && npm run build:svgsymbol",
+    "build": "npm update && npm run build:svgsymbol",
     "build:svgsymbol": "node svgsymbol/build.js"
   },
   "repository": {
