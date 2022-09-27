@@ -73,5 +73,14 @@ describe("momentum-constructor-common fileSystem",()=>{
         let list = fs.readdirSync(outPath);
         expect(Object.keys(list).length).toBeGreaterThan(0);
     });
+
+    test('test saveFiles font', ()=> {
+        let outPath = path.join(__dirname, './output/saveFiles');
+        mfs.clean(outPath);
+        let files = mfs.read(MomentumAbstractType.font);
+        mfs.saveFiles(files, outPath);
+        let list = fs.readdirSync(outPath);
+        expect(Object.keys(list).length).toBeGreaterThan(0);
+    });
     
 });
