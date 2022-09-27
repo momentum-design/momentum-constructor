@@ -63,6 +63,16 @@ class MomentumFileSystem {
         }
     }
 
+    reconvetContent(content:any, ext:string) {
+        console.log(ext);
+        switch(ext.toLocaleLowerCase()) {
+            case '.json':
+                return JSON.stringify(content, null, '\t');
+            default:
+                return content;
+        }
+    }
+
     clean(dest:string) {
         fs.mkdirSync(dest, {
             recursive: true,
@@ -90,14 +100,14 @@ class MomentumFileSystem {
                 if(!fs.existsSync(dest)){
                     this.clean(dest);
                 }
-                fs.writeFileSync(path.join(dest, file.fullName), file.content);
+                fs.writeFileSync(path.join(dest, file.fullName), this.reconvetContent(file.content, file.extensionName));
             });
         } else {
             Object.values(files).forEach((file:IFile)=>{
                 if(!fs.existsSync(file.dir)){
                     this.clean(file.dir);
                 }
-                fs.writeFileSync(file.path, file.content);
+                fs.writeFileSync(file.path, this.reconvetContent(file.content, file.extensionName));
             });
         }
     }

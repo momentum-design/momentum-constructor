@@ -27,7 +27,7 @@
 		"yargs-parser": "20.2.6"
 	},
 	"dependencies": {
-		"momentum-abstract": "^1.0.5"
+		"momentum-abstract": "^1.0.22"
 	},
 	"publishConfig": {
 		"access": "public"
