@@ -64,7 +64,6 @@ class MomentumFileSystem {
     }
 
     reconvetContent(content:any, ext:string) {
-        console.log(ext);
         switch(ext.toLocaleLowerCase()) {
             case '.json':
                 return JSON.stringify(content, null, '\t');
