@@ -26,10 +26,10 @@ class Convert {
         }
     }
 
-    renameFile(mometnumFiles: Record<string, IFile>, replacement: IReplacementItem): Record<string, IFile>  {
+    renameFile(momentumFiles: Record<string, IFile>, replacement: IReplacementItem): Record<string, IFile>  {
         const ret = {};
-        Object.keys(mometnumFiles).forEach((shortPath)=>{
-            const mfile:IFile = mometnumFiles[shortPath];
+        Object.keys(momentumFiles).forEach((shortPath)=>{
+            const mfile:IFile = momentumFiles[shortPath];
             const name = mfile.name.replace(replacement.pattern, replacement.words);
             const fullName = `${name}.${mfile.extensionName}`;
             const newShortPath = path.join(`${path.dirname(shortPath)}`, fullName);
@@ -39,23 +39,23 @@ class Convert {
                 name: name,
                 fullName: fullName,
                 extensionName: mfile.extensionName,
-                content: mometnumFiles[shortPath].content
+                content: momentumFiles[shortPath].content
             }
         });
         return ret;
     }
 
-    renameToken(mometnumFiles: Record<string, IFile>, replacement: IReplacementItem, momentumType:MomentumAbstractType): Record<string, IFile>  {
+    renameToken(momentumFiles: Record<string, IFile>, replacement: IReplacementItem, momentumType:MomentumAbstractType): Record<string, IFile>  {
         const _check = this.getEndCheckFunc(momentumType);
-        Object.values(mometnumFiles).forEach((mfile)=>{
+        Object.values(momentumFiles).forEach((mfile)=>{
             this._renameToken(mfile.content, replacement, _check);
         });
-        return mometnumFiles;
+        return momentumFiles;
     }
 
-    flat(mometnumFiles: Record<string, IFile>, momentumType:MomentumAbstractType): Record<string, IFile>  {
+    flat(momentumFiles: Record<string, IFile>, momentumType:MomentumAbstractType): Record<string, IFile>  {
         const _check = this.getEndCheckFunc(momentumType);
-        Object.values(mometnumFiles).forEach((mfile)=>{
+        Object.values(momentumFiles).forEach((mfile)=>{
             if(this.isOjbect(mfile.content)) {
                 Object.keys(mfile.content).forEach((key)=>{
                     const _newJson = {};
@@ -64,7 +64,7 @@ class Convert {
                 });
             }
         });
-        return mometnumFiles;
+        return momentumFiles;
     }
 
     private _flat(ret:Record<string,any>, json:any, isEndNode:(item:any)=>boolean) {
